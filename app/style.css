@@ -1,0 +1,12 @@
+.draggablenote
+{
+	border: 1px solid;
+	min-height: 50px;
+	width:40px;
+}
+
+#notes
+{
+	min-height: 800px;
+	width:800px;
+}

@@ -1,0 +1,16 @@
+{
+  "name": "sticky_todo",
+  "version": "0.0.1",
+  "main":"main.js",
+  "author":"myself",
+  "description": "cute todo ",
+  "scripts": {
+        "start": "electron ."
+    },
+  "dependencies": {
+  	"electron": "",
+  	"jquery": "",
+  	"jquery-ui": ""
+  }
+
+}

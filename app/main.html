@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jQuery UI Draggable - Constrain movement</title>
+<link rel="stylesheet" href="style.css">
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>if (window.module) module = window.module;</script>
+<script>
+
+	$('document').ready(function() {
+		$('#plus').click(function() {
+			var node = createNote();
+			node.draggable({
+				containment : "parent"
+			});
+			$('#notes').append(node);
+		});
+
+	});
+
+	function createNote() {
+		return $('<div>').addClass('draggablenote');
+	}
+</script>
+</head>
+<body>
+
+	<span id="plus">+</span>
+	<div id="notes"></div>
+
+</body>
+</html>
