@@ -8,23 +8,17 @@
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="js/notewindow.js"></script>
 <script>if (window.module) module = window.module;</script>
 <script>
-
+	var notewindow = require('./js/notewindow');
 	$('document').ready(function() {
 		$('#plus').click(function() {
-			var node = createNote();
-			node.draggable({
-				containment : "parent"
-			});
-			$('#notes').append(node);
+			$('#notes').append(new notewindow());
 		});
 
 	});
 
-	function createNote() {
-		return $('<div>').addClass('draggablenote');
-	}
 </script>
 </head>
 <body>
