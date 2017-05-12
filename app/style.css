@@ -15,9 +15,8 @@
 
 .title
 {
-	width:100%;
 	cursor: pointer;
-	display:inline-block;
+	display:block;
 	font-weight: bold;
 	font-size: medium;
 	padding-left: 20px;
