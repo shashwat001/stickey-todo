@@ -9,6 +9,7 @@
     },
   "dependencies": {
   	"electron": "",
+  	"electron-localshortcut": "",
   	"jquery": "",
   	"jquery-ui": ""
   }

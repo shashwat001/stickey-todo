@@ -58,6 +58,8 @@ $(document).on('focusout', '.edit-list', function(e) {
 });
 
 $(document).on('click', '.edit-list', function(e) {
+		console.log(this);
+		e.stopPropagation();
 		$(this).focus();
 });
 
@@ -77,8 +79,7 @@ function moveInsidePrevSibling($obj)
 		$ul = $prev.children('ul')[0];
 	}
 	
-	// $obj.appendTo($ul);
-	$ul.append($obj);
+	 $obj.appendTo($ul);
 	
 }
 
@@ -95,3 +96,19 @@ function moveAfterParent($obj)
 		$parUL.remove();
 }
 
+const {
+	ipcRenderer
+}  = require('electron');
+
+ipcRenderer.on('global-shortcut', function(arg) {
+    saveData();
+});
+
+function saveData()
+{
+	console.log('first reached');
+	$('.draggablenote').each(function(e){
+		console.log('reached');
+		console.log($(this).position())
+		});
+}
