@@ -1,51 +1,52 @@
 var notewindow = require('./js/notewindow');
 
+function isEmpty( el ){
+	return !$.trim(el.text())
+}
+
+function getLi()
+{
+	return $('<li>').addClass('edit-list')
+	.attr('contentEditable', true);
+}
+
 
 $('document').ready(function() {
 	$('#plus').click(function() {
 		$('#notes').append(new notewindow().node);
 	});
-	
-
-	$('.edit-list').on("keydown", function(e) {
-		var keyCode = e.keyCode || e.which; 
-		e.stopPropagation();
-		
-		if (keyCode == 13) {
-			var $newLi = getLi();
-			$(this).after($newLi);
-			$newLi.focus();
-			return false;
-		}
-		if (keyCode == 9) {
-			if(e.shiftKey)
-			{
-				console.log('shift tab ');
-				console.log(this);
-				console.log(e.target);
-				moveAfterParent($(this));
-			}
-			else
-			{	
-				console.log('tab ');
-				console.log(this);
-				moveInsidePrevSibling($(this));
-			}
-
-			return false;
-		}
-	})
 
 });
 
+$(document).on('keydown', '.edit-list', function(e) {
 
-function getLi()
-{
-	return $('<li>').addClass('edit-list')
-	.attr('contentEditable', true)
-	.click(function(ev){
-		$(this).focus();
-	}).focusout(function(e) {
+	var keyCode = e.keyCode || e.which; 
+
+	if (keyCode == 13) {
+		var $newLi = getLi();
+		$(this).after($newLi);
+		$newLi.focus();
+		return false;
+	}
+	if (keyCode == 9) {
+		if(e.shiftKey)
+		{
+			console.log('shift tab ');
+			console.log(this);
+			console.log(e.target);
+			moveAfterParent($(this));
+		}
+		else
+		{	
+			console.log('tab ');
+			console.log(this);
+			moveInsidePrevSibling($(this));
+			return false;
+		}
+	}
+});
+
+$(document).on('focusout', '.edit-list', function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 		console.log('focusout');
@@ -54,8 +55,11 @@ function getLi()
 			$(this).remove();
 		}
 		return false;
-	})
-}
+});
+
+$(document).on('click', '.edit-list', function(e) {
+		$(this).focus();
+});
 
 function moveInsidePrevSibling($obj)
 {
@@ -73,7 +77,8 @@ function moveInsidePrevSibling($obj)
 		$ul = $prev.children('ul')[0];
 	}
 	
-	$obj.appendTo($ul);
+	// $obj.appendTo($ul);
+	$ul.append($obj);
 	
 }
 
@@ -90,6 +95,3 @@ function moveAfterParent($obj)
 		$parUL.remove();
 }
 
-function isEmpty( el ){
-	return !$.trim(el.text())
-}
