@@ -25,26 +25,25 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 
 	var keyCode = e.keyCode || e.which; 
 
-	if (keyCode == 13) {
+	if (keyCode == 13) 
+	{
 		var $newLi = getLi();
 		$(this).parent('li').after($newLi);
 		$newLi.children('span').focus();
 		return false;
 	}
-	if (keyCode == 9) {
+	if (keyCode == 9) 
+	{
 		if(e.shiftKey)
 		{
-			console.log('shift tab ');
-			console.log(this);
-			console.log(e.target);
 			moveAfterParent($(this));
+			$(this).focus();
 			return false;
 		}
 		else
 		{	
-			console.log('tab ');
-			console.log(this);
 			moveInsidePrevSibling($(this));
+			$(this).focus();
 			return false;
 		}
 	}
@@ -64,7 +63,6 @@ $(document).on('focusout', '.edit-list-span', function(e) {
 $(document).on('click', '.edit-list-span', function(e) {
 		console.log(this);
 		e.stopPropagation();
-//		this.contentEditable = true;
 		$(this).focus();
 });
 
