@@ -6,8 +6,11 @@ function isEmpty( el ){
 
 function getLi()
 {
-	return $('<li>').addClass('edit-list')
+	var $li = $('<li>').addClass('edit-list');
+	var $span = $('<span>').addClass('edit-list-span')
 	.attr('contentEditable', true);
+	
+	return $li.append($span);
 }
 
 
@@ -18,14 +21,14 @@ $('document').ready(function() {
 
 });
 
-$(document).on('keydown', '.edit-list', function(e) {
+$(document).on('keydown', '.edit-list-span', function(e) {
 
 	var keyCode = e.keyCode || e.which; 
 
 	if (keyCode == 13) {
 		var $newLi = getLi();
-		$(this).after($newLi);
-		$newLi.focus();
+		$(this).parent('li').after($newLi);
+		$newLi.children('span').focus();
 		return false;
 	}
 	if (keyCode == 9) {
@@ -35,6 +38,7 @@ $(document).on('keydown', '.edit-list', function(e) {
 			console.log(this);
 			console.log(e.target);
 			moveAfterParent($(this));
+			return false;
 		}
 		else
 		{	
@@ -46,7 +50,7 @@ $(document).on('keydown', '.edit-list', function(e) {
 	}
 });
 
-$(document).on('focusout', '.edit-list', function(e) {
+$(document).on('focusout', '.edit-list-span', function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 		console.log('focusout');
@@ -57,15 +61,16 @@ $(document).on('focusout', '.edit-list', function(e) {
 		return false;
 });
 
-$(document).on('click', '.edit-list', function(e) {
+$(document).on('click', '.edit-list-span', function(e) {
 		console.log(this);
 		e.stopPropagation();
+//		this.contentEditable = true;
 		$(this).focus();
 });
 
 function moveInsidePrevSibling($obj)
 {
-	var $prev = $obj.prev();
+	var $prev = $obj.parent('li').prev();
 	if($prev.length == 0)
 		return;
 	var $ul;
@@ -79,20 +84,20 @@ function moveInsidePrevSibling($obj)
 		$ul = $prev.children('ul')[0];
 	}
 	
-	 $obj.appendTo($ul);
+	 $obj.parent('li').appendTo($ul);
 	
 }
 
 function moveAfterParent($obj)
 {
-	var $parUL = $obj.parent('ul');
+	var $parUL = $obj.parent('li').parent('ul');
 	var $parLI = $parUL.parent('li');
 	
 	if($parLI.length == 0)
 		return;
 	
-	$obj.insertAfter($parLI);
-	if($parUL.child('li').length == 0)
+	$obj.parent('li').insertAfter($parLI);
+	if($parUL.children('li').length == 0)
 		$parUL.remove();
 }
 
