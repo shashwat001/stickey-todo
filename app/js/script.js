@@ -100,18 +100,64 @@ function moveAfterParent($obj)
 }
 
 const {
-	ipcRenderer
+	ipcRenderer,
+	remote
 }  = require('electron');
 
 ipcRenderer.on('global-shortcut', function(arg) {
     saveData();
 });
 
+var fs = require("fs");
+var path = remote.app.getPath("home") + '/todo-app.txt';
+
+
 function saveData()
 {
 	console.log('first reached');
+	var notesJsonData = [];
 	$('.draggablenote').each(function(e){
 		console.log('reached');
-		console.log($(this).position())
+		console.log($(this).position());
+		var jsonData = {};
+		jsonData['position'] = {'left' : $(this).position().left,
+								'right': $(this).position().top};
+		jsonData['data'] = getData($(this).children('ul'));
+		notesJsonData.push(jsonData);
+	});
+	var data = JSON.stringify(notesJsonData);
+	fs.writeFile(path, data, function(error) {
+	     if (error) {
+	       console.error("write error:  " + error.message);
+	     } else {
+	       console.log("Successful Write to " + path);
+	     }
+	});
+}
+
+function getData($ulObj)
+{
+	var returnObj = getLiListData($ulObj.children('li'));
+	return returnObj;
+}
+
+function getLiListData($liList)
+{	var returnArray = [];
+	$liList.each(function(e){
+		var liJson = {};
+		liJson['text'] = $(this).children('span').text();
+		liJson['data'] = getData($(this).children('ul'));
+		returnArray.push(liJson);
+	});
+	return returnArray;
+}
+
+function loadFile()
+{
+	fs.readFile(path, 'utf8', function (err,data) {
+		  if (err) {
+		    return console.log(err);
+		  }
+		  console.log(data);
 		});
 }
