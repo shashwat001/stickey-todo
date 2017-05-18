@@ -54,21 +54,14 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 	}
 });
 
-$(document).on('focusout', '.edit-list-span', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		console.log('focusout');
-		if(isEmpty($(this)) && $(this).siblings().size() != 0)
-		{
-			$(this).remove();
-		}
-		return false;
-});
-
 $(document).on('click', '.edit-list-span', function(e) {
-		console.log(this);
 		e.stopPropagation();
 		$(this).focus();
+});
+
+$(document).on('dblclick', '.edit-list-span, .title', function(e) {
+	console.log("double")
+	e.stopPropagation();
 });
 
 function moveInsidePrevSibling($obj)
@@ -123,11 +116,8 @@ var path = remote.app.getPath("home") + '/todo-app.txt';
 
 function saveData()
 {
-	console.log('first reached');
 	var notesJsonData = [];
 	$('.draggablenote').each(function(e){
-		console.log('reached');
-		console.log($(this).position());
 		var jsonData = {};
 		jsonData['position'] = {'left' : $(this).position().left,
 								'right': $(this).position().top};
@@ -140,7 +130,6 @@ function saveData()
 	     if (error) {
 	       console.error("write error:  " + error.message);
 	     } else {
-	       console.log("Successful Write to " + path);
 	     }
 	});
 }
@@ -168,13 +157,10 @@ function loadFile()
 		  if (err) {
 		    return console.log(err);
 		  }
-		  console.log(data);
 		  var jsonObj = JSON.parse(data);
-		  console.log(jsonObj);
 
 		  for(let noteData of jsonObj)
 	  		{
-	  			console.log(noteData);
 	  			let noteDiv = new notewindow(true).node
 	  			noteDiv.append(getDataHtml(noteData['data']));
   				$('#notes').append(noteDiv);
