@@ -4,11 +4,15 @@ function isEmpty( el ){
 	return !$.trim(el.text())
 }
 
-function getLi()
+function getLi(text)
 {
 	var $li = $('<li>').addClass('edit-list');
 	var $span = $('<span>').addClass('edit-list-span')
 	.attr('contentEditable', true);
+	if(text)
+	{
+		$span = $span.text(text);
+	}
 	
 	return $li.append($span);
 }
@@ -105,8 +109,12 @@ const {
 	remote
 }  = require('electron');
 
-ipcRenderer.on('global-shortcut', function(arg) {
+ipcRenderer.on('saveData', function(arg) {
     saveData();
+});
+
+ipcRenderer.on('open-new-note', function(arg) {
+    $('#plus').trigger('click');
 });
 
 var fs = require("fs");
@@ -123,6 +131,7 @@ function saveData()
 		var jsonData = {};
 		jsonData['position'] = {'left' : $(this).position().left,
 								'right': $(this).position().top};
+		jsonData['title'] = $(this).children('span').text();
 		jsonData['data'] = getData($(this).children('ul'));
 		notesJsonData.push(jsonData);
 	});
@@ -163,6 +172,33 @@ function loadFile()
 		  var jsonObj = JSON.parse(data);
 		  console.log(jsonObj);
 
+		  for(let noteData of jsonObj)
+	  		{
+	  			console.log(noteData);
+	  			let noteDiv = new notewindow(true).node
+	  			noteDiv.append(getDataHtml(noteData['data']));
+  				$('#notes').append(noteDiv);
+  				noteDiv.children('span').text(noteData['title']);
+  				noteDiv.css({
+  					top: noteData['position']['top'],
+  					left:noteData['position']['left']
+  				});
+	  		}
+
 		});
 
+}
+
+function getDataHtml(ulDataArray)
+{
+	let $ul = $('<ul>').addClass('myUL');
+	for(let liData of ulDataArray)
+	{
+		let text = liData['text'];
+		let innerUL = liData['data'];
+		let $li = getLi(text);
+		$li.append(getDataHtml(innerUL));
+		$ul.append($li);
+	}
+	return $ul;
 }
