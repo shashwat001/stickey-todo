@@ -29,7 +29,19 @@ function createWindow(){
 	electronLocalshortcut.register(mainWindow,'ctrl+T', () => {
 	    mainWindow.webContents.send('open-new-note');
 	  }) 
+	electronLocalshortcut.register(mainWindow,'ctrl+N', () => {
+	    showShortcuts();
+	  })
 //	mainWindow.webContents.openDevTools();
+}
+
+function showShortcuts()
+{
+	let settingsWindow = new BrowserWindow({frame:false, parent: mainWindow, modal: true, show: false});
+	settingsWindow.loadURL('file://' + __dirname + '/app/shortcuts.html');
+	settingsWindow.once('ready-to-show', () => {
+		settingsWindow.show()
+		})
 }
 
 

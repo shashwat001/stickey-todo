@@ -4,14 +4,6 @@ function notewindow(isempty)
 	this.node.draggable({
 		containment : "parent"
 	});
-	this.node.dblclick(function(){
-		$(this).draggable({ disabled: false });
-		$(this).css( 'cursor', 'move' );
-	});
-	this.node.click(function(){
-		$(this).draggable({ disabled: true });
-		$(this).css( 'cursor', 'text' );
-	});
 }
 
 function createNote(isempty) {
