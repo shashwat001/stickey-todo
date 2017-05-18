@@ -19,6 +19,8 @@ let mainWindow;
 
 function createWindow(){
 	mainWindow = new BrowserWindow();
+	mainWindow.maximize();
+	
 	mainWindow.loadURL('file://' + __dirname + '/app/main.html');
 	
 	electronLocalshortcut.register(mainWindow,'ctrl+S', () => {
@@ -27,7 +29,7 @@ function createWindow(){
 	electronLocalshortcut.register(mainWindow,'ctrl+T', () => {
 	    mainWindow.webContents.send('open-new-note');
 	  }) 
-	mainWindow.webContents.openDevTools();
+//	mainWindow.webContents.openDevTools();
 }
 
 
