@@ -15,6 +15,7 @@ function getLi()
 
 
 $('document').ready(function() {
+	loadFile();
 	$('#plus').click(function() {
 		$('#notes').append(new notewindow().node);
 	});
@@ -159,5 +160,9 @@ function loadFile()
 		    return console.log(err);
 		  }
 		  console.log(data);
+		  var jsonObj = JSON.parse(data);
+		  console.log(jsonObj);
+
 		});
+
 }
