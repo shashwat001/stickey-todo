@@ -33,18 +33,20 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 
 	var keyCode = e.keyCode || e.which; 
 	
-	if(keyCode >= 37 && keyCode <= 40)
+	if(keyCode >= 37 && keyCode <= 40) //arrows
 	{
 		e.stopPropagation();
-		handleKeyPress($(this), e);
+		handleKeyPress.call(this, e);
 	}
 	
-	if (keyCode == 27)
+	if (keyCode == 27) //escape
 	{
-		$(this).closest('.draggablenote').focus();
+		$(this).blur();
+		$(this).closest('.draggablenote').trigger('click');
+		return false;
 	}
 
-	if (keyCode == 13) 
+	if (keyCode == 13) //enter
 	{
 		if(e.ctrlKey)
 		{
@@ -54,7 +56,7 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 			return false;
 		}
 	}
-	if (keyCode == 9) 
+	if (keyCode == 9) //tab
 	{
 		if(e.shiftKey)
 		{
@@ -69,10 +71,19 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 			return false;
 		}
 	}
+
+	if(keyCode == 68) //d
+	{
+		if(e.ctrlKey)
+		{
+			$(this).closest('.draggablenote').remove();
+			return false;
+		}
+	}
 });
 
 $(document).on('click', '.edit-list-span', function(e) {
-		
+	$(this).focus();
 });
 
 $(document).on('dblclick', '.edit-list-span, .title', function(e) {
@@ -218,6 +229,8 @@ function loadFile()
 
 function getDataHtml(ulDataArray)
 {
+	if(ulDataArray.length == 0)
+		return;
 	let $ul = $('<ul>').addClass('myUL');
 	for(let liData of ulDataArray)
 	{
@@ -230,14 +243,68 @@ function getDataHtml(ulDataArray)
 	return $ul;
 }
 
-function handleKeyPress($obj, e)
+function handleKeyPress(e)
 {
 	var keyCode = e.keyCode || e.which; 
 	if(e.ctrlKey)
 	{
-		if(keyCode == 38)
+		if(keyCode == 40)
 		{
-			
+			let $nextLi = getNextList($(this).parent('li'), false);
+			console.log($nextLi);
+			if($nextLi)
+			{
+				$nextLi.children('span').focus();
+			}
 		}
+		else if(keyCode == 38)
+		{
+			let $prevLi = getPreviousList($(this).parent('li'), false);
+			console.log($prevLi);
+			if($prevLi)
+			{
+				$prevLi.children('span').focus();
+			}
+		}
+	}
+}
+
+function getNextList($li, moveUp)
+{
+	if(!moveUp && $li.children('ul').length != 0)	
+	{
+		return $li.children('ul').children('li').first();
+	}
+
+	else if($li.next('li').length != 0)
+	{
+		return $li.next('li');
+	}
+	else if($li.parent('ul').parent('li').length != 0)
+	{
+		return getNextList($li.parent('ul').parent('li'), true);
+	}
+	return ;
+}
+
+function getPreviousList($li, moveDown)
+{
+
+	if(moveDown)
+	{
+		if($li.children('ul').length != 0)
+		{
+			return getPreviousList($li.children('ul').children('li').last(), true);
+		}
+		return $li;
+	}
+
+	if($li.prev('li').length != 0)
+	{
+		return getPreviousList($li.prev('li'), true);
+	}
+	else
+	{
+		return $li.parent('ul').parent('li');
 	}
 }
