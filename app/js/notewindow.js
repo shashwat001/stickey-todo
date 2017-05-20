@@ -1,5 +1,3 @@
-
-
 function notewindow(savedData)
 {
 	if(savedData)
@@ -78,11 +76,11 @@ module.exports = notewindow;
 
 $(document).on('keydown', '.title', function(e) {
 	var keyCode = e.keyCode || e.which;
-	if(keyCode == 40 && e.ctrlKey)
+	if(keyCode == KEY_DOWN && e.ctrlKey)
 	{
 		$(this).next('ul').children('li').first().children('span').focus();
 	}
-	else if (keyCode == 27) //escape
+	else if (keyCode == KEY_ESCAPE) //escape
 	{
 		$(this).blur();
 		$(this).closest('.draggablenote').focus();
@@ -94,30 +92,27 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 
 	var keyCode = e.keyCode || e.which; 
 	
-	if(keyCode >= 37 && keyCode <= 40) //arrows
+	if(keyCode >= KEY_LEFT && keyCode <= KEY_DOWN) //arrows
 	{
 		e.stopPropagation();
 		handleKeyPress.call(this, e);
 	}
 	
-	if (keyCode == 27) //escape
+	else if (keyCode == KEY_ESCAPE) //escape
 	{
 		$(this).blur();
 		$(this).closest('.draggablenote').focus();
 		return false;
 	}
 
-	if (keyCode == 13) //enter
+	else if (keyCode == KEY_ENTER && e.ctrlKey) //enter
 	{
-		if(e.ctrlKey)
-		{
-			var $newLi = getLi();
-			$(this).parent('li').after($newLi);
-			$newLi.children('span').focus();
-			return false;
-		}
+		var $newLi = getLi();
+		$(this).parent('li').after($newLi);
+		$newLi.children('span').focus();
+		return false;
 	}
-	if (keyCode == 9) //tab
+	else if (keyCode == KEY_TAB) //tab
 	{
 		if(e.shiftKey)
 		{
@@ -131,6 +126,11 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 			$(this).focus();
 			return false;
 		}
+	}
+	else if(keyCode == KEY_D && e.ctrlKey)
+	{
+		focusPrevious.call(this);
+		$(this).parent('li').remove();	
 	}
 });
 
@@ -159,31 +159,31 @@ $(document).on('keydown', '.draggablenote', function(e) {
 	{
 		var keyCode = e.keyCode || e.which; 
 		
-		if(keyCode >= 37 && keyCode <= 40)
+		if(keyCode >= KEY_LEFT && keyCode <= KEY_DOWN)
 		{
 			if(e.ctrlKey)
 			{
 				let offset = 15;
-				if(keyCode == 37)
+				if(keyCode == KEY_LEFT)
 				{
 					$(this).css('left', '-=' + offset)
 				}
-				else if(keyCode == 38)
+				else if(keyCode == KEY_UP)
 				{
 					$(this).css('top', '-=' + offset)
 				}
-				else if(keyCode == 39)
+				else if(keyCode == KEY_RIGHT)
 				{
 					$(this).css('left', '+=' + offset)
 				}
-				else if(keyCode == 40)
+				else if(keyCode == KEY_DOWN)
 				{
 					$(this).css('top', '+=' + offset)
 				}
 			}
 			return false;
 		}
-		else if (keyCode == 9) //tab
+		else if (keyCode == KEY_TAB) //tab
 		{
 			if(e.shiftKey)
 			{
@@ -197,13 +197,13 @@ $(document).on('keydown', '.draggablenote', function(e) {
 			}
 		}
 		
-		else if(keyCode == 13)
+		else if(keyCode == KEY_ENTER)
 		{		
 			$(this).children('.title').focus();
 			return false;
 		}
 		
-		else if(keyCode == 68) //d
+		else if(keyCode == KEY_D) //d
 		{
 			if(e.ctrlKey)
 			{
@@ -254,18 +254,18 @@ function handleKeyPress(e)
 	
 	if(e.ctrlKey && e.shiftKey)
 	{
-		if(keyCode == 40)
+		if(keyCode == KEY_DOWN)
 		{
 			shiftDown($(this).parent('li'));
 		}
-		else if(keyCode == 38)
+		else if(keyCode == KEY_UP)
 		{
 			shiftUp($(this).parent('li'));
 		}
 	}
 	else if(e.ctrlKey)
 	{
-		if(keyCode == 40)
+		if(keyCode == KEY_DOWN)
 		{
 			let $nextLi = getNextList($(this).parent('li'), false);
 			console.log($nextLi);
@@ -274,19 +274,24 @@ function handleKeyPress(e)
 				$nextLi.children('span').focus();
 			}
 		}
-		else if(keyCode == 38)
+		else if(keyCode == KEY_UP)
 		{
-			let $prevLi = getPreviousList($(this).parent('li'), false);
-			console.log($prevLi);
-			if($prevLi.length != 0)
-			{
-				$prevLi.children('span').focus();
-			}
-			else
-			{
-				$(this).parent('li').parent('ul').prev('span').focus();
-			}
+			focusPrevious.call(this)
 		}
+	}
+}
+
+function focusPrevious()
+{
+	let $prevLi = getPreviousList($(this).parent('li'), false);
+	console.log($prevLi);
+	if($prevLi.length != 0)
+	{
+		$prevLi.children('span').focus();
+	}
+	else
+	{
+		$(this).parent('li').parent('ul').prev('span').focus();
 	}
 }
 
