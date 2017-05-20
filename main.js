@@ -35,6 +35,10 @@ function createWindow(){
 //	mainWindow.webContents.openDevTools();
 }
 
+ipcMain.on('save-settings', (event, arg) => {
+	
+});
+
 function showShortcuts()
 {
 	let settingsWindow = new BrowserWindow({frame:false, parent: mainWindow, modal: true, show: false});
