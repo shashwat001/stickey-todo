@@ -161,6 +161,7 @@ $(document).on('keydown', '.draggablenote', function(e) {
 			if(e.ctrlKey)
 			{
 				$(this).remove();
+				$('.draggablenote').first().focus();
 				return false;
 			}
 		}
