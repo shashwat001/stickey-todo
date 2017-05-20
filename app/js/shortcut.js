@@ -10,7 +10,9 @@ const {
 
 const fs = require('fs');
 
-$(document).ready(function(){
+$(document).ready(function(){	
+	$( "#tabs" ).tabs();	
+	
 	$('form').submit(function(){
 		let settings = $(this).serializeArray();
 		let jsonData = {}
