@@ -29,6 +29,20 @@ $('document').ready(function() {
 
 });
 
+$(document).on('keydown', '.title', function(e) {
+	var keyCode = e.keyCode || e.which;
+	if(keyCode == 40 && e.ctrlKey)
+	{
+		$(this).next('ul').children('li').first().children('span').focus();
+	}
+	else if (keyCode == 27) //escape
+	{
+		$(this).blur();
+		$(this).closest('.draggablenote').focus();
+		return false;
+	}
+});
+
 $(document).on('keydown', '.edit-list-span', function(e) {
 
 	var keyCode = e.keyCode || e.which; 
@@ -42,7 +56,7 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 	if (keyCode == 27) //escape
 	{
 		$(this).blur();
-		$(this).closest('.draggablenote').trigger('click');
+		$(this).closest('.draggablenote').focus();
 		return false;
 	}
 
@@ -108,11 +122,25 @@ $(document).on('keydown', '.draggablenote', function(e) {
 	{
 		if(e.ctrlKey)
 		{
+			let offset = 15;
 			if(keyCode == 37)
 			{
-				
+				$(this).css('left', '-=' + offset)
+			}
+			else if(keyCode == 38)
+			{
+				$(this).css('top', '-=' + offset)
+			}
+			else if(keyCode == 39)
+			{
+				$(this).css('left', '+=' + offset)
+			}
+			else if(keyCode == 40)
+			{
+				$(this).css('top', '+=' + offset)
 			}
 		}
+		return false;
 	}
 });
 
@@ -172,7 +200,7 @@ function saveData()
 	$('.draggablenote').each(function(e){
 		var jsonData = {};
 		jsonData['position'] = {'left' : $(this).position().left,
-								'right': $(this).position().top};
+								'top': $(this).position().top};
 		jsonData['title'] = $(this).children('span').text();
 		jsonData['data'] = getData($(this).children('ul'));
 		notesJsonData.push(jsonData);
@@ -245,8 +273,20 @@ function getDataHtml(ulDataArray)
 
 function handleKeyPress(e)
 {
-	var keyCode = e.keyCode || e.which; 
-	if(e.ctrlKey)
+	var keyCode = e.keyCode || e.which;
+	
+	if(e.ctrlKey && e.shiftKey)
+	{
+		if(keyCode == 40)
+		{
+			shiftDown($(this).parent('li'));
+		}
+		else if(keyCode == 38)
+		{
+			shiftUp($(this).parent('li'));
+		}
+	}
+	else if(e.ctrlKey)
 	{
 		if(keyCode == 40)
 		{
@@ -261,9 +301,13 @@ function handleKeyPress(e)
 		{
 			let $prevLi = getPreviousList($(this).parent('li'), false);
 			console.log($prevLi);
-			if($prevLi)
+			if($prevLi.length != 0)
 			{
 				$prevLi.children('span').focus();
+			}
+			else
+			{
+				$(this).parent('li').parent('ul').prev('span').focus();
 			}
 		}
 	}
@@ -307,4 +351,22 @@ function getPreviousList($li, moveDown)
 	{
 		return $li.parent('ul').parent('li');
 	}
+}
+
+function shiftUp($li)
+{
+	if($li.prev().length != 0)
+	{
+		$li.insertBefore($li.prev());
+	}
+	$li.children('span').focus();
+}
+
+function shiftDown($li)
+{
+	if($li.next().length != 0)
+	{
+		$li.insertAfter($li.next());
+	}
+	$li.children('span').focus();
 }

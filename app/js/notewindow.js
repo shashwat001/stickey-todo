@@ -8,7 +8,7 @@ function notewindow(isempty)
 
 function createNote(isempty) {
 	var $span = $('<span>').addClass('title').attr('contentEditable', true);
-	var node = $('<div>').addClass('draggablenote').append($span);
+	var node = $('<div>').addClass('draggablenote').attr('tabindex', '-1').append($span);
 
 	if(!isempty)
 	{
