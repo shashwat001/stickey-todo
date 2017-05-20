@@ -1,5 +1,20 @@
 body
 {
 	background: #A9FFA9;
-	text-align: center;
+}
+
+#tabs-2
+{
+	margin-left: 20px;
+}
+
+#tabs-2 table, #tabs-2 td
+{
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+#tabs-2 td
+{
+	padding: 5px 20px;
 }

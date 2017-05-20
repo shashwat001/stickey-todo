@@ -12,6 +12,7 @@
 	 -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
 	/* Opera */
 	 box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+	 position: absolute !important;
 }
 
 .draggablenote:focus {
@@ -66,7 +67,6 @@ ul ul li
 
 .edit-list-span {
 	padding: 2px 5px 2px 5px;
-    position: relative;
     background: #fff;
     font-size: 14px;
     transition: 0.2s;

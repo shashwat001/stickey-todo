@@ -85,15 +85,6 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 			return false;
 		}
 	}
-
-	if(keyCode == 68) //d
-	{
-		if(e.ctrlKey)
-		{
-			$(this).closest('.draggablenote').remove();
-			return false;
-		}
-	}
 });
 
 $(document).on('click', '.edit-list-span', function(e) {
@@ -116,31 +107,63 @@ $(document).on('dblclick', '.draggablenote', function(e) {
 });
 
 $(document).on('keydown', '.draggablenote', function(e) {
-	var keyCode = e.keyCode || e.which; 
-	
-	if(keyCode >= 37 && keyCode <= 40)
+
+	if(this == e.target)
 	{
-		if(e.ctrlKey)
+		var keyCode = e.keyCode || e.which; 
+		
+		if(keyCode >= 37 && keyCode <= 40)
 		{
-			let offset = 15;
-			if(keyCode == 37)
+			if(e.ctrlKey)
 			{
-				$(this).css('left', '-=' + offset)
+				let offset = 15;
+				if(keyCode == 37)
+				{
+					$(this).css('left', '-=' + offset)
+				}
+				else if(keyCode == 38)
+				{
+					$(this).css('top', '-=' + offset)
+				}
+				else if(keyCode == 39)
+				{
+					$(this).css('left', '+=' + offset)
+				}
+				else if(keyCode == 40)
+				{
+					$(this).css('top', '+=' + offset)
+				}
 			}
-			else if(keyCode == 38)
+			return false;
+		}
+		else if (keyCode == 9) //tab
+		{
+			if(e.shiftKey)
 			{
-				$(this).css('top', '-=' + offset)
+				$(this).prev('.draggablenote').focus();
+				return false;
 			}
-			else if(keyCode == 39)
-			{
-				$(this).css('left', '+=' + offset)
-			}
-			else if(keyCode == 40)
-			{
-				$(this).css('top', '+=' + offset)
+			else
+			{	
+				$(this).next('.draggablenote').focus();
+				return false;
 			}
 		}
-		return false;
+		
+		else if(keyCode == 13)
+		{		
+			$(this).children('.title').focus();
+			return false;
+		}
+		
+		else if(keyCode == 68) //d
+		{
+			if(e.ctrlKey)
+			{
+				$(this).remove();
+				return false;
+			}
+		}
 	}
 });
 
