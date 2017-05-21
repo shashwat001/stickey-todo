@@ -27,6 +27,11 @@ ipcRenderer.on('open-new-note', function(arg) {
 var fs = require("fs");
 var path = remote.app.getPath("home") + '/todo-app.txt';
 
+function printMessage(message)
+{
+	$('#message-box').text(message).fadeIn('slow');;
+	$('#message-box').delay(2000).fadeOut('slow');
+}
 
 function saveData()
 {
@@ -40,25 +45,9 @@ function saveData()
 	     if (error) {
 	       console.error("write error:  " + error.message);
 	     } else {
+	    	 printMessage('Successfully Saved');;
 	     }
 	});
-}
-
-function getData($ulObj)
-{
-	var returnObj = getLiListData($ulObj.children('li'));
-	return returnObj;
-}
-
-function getLiListData($liList)
-{	var returnArray = [];
-	$liList.each(function(e){
-		var liJson = {};
-		liJson['text'] = $(this).children('span').text();
-		liJson['data'] = getData($(this).children('ul'));
-		returnArray.push(liJson);
-	});
-	return returnArray;
 }
 
 function loadFile()

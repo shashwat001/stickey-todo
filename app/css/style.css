@@ -41,6 +41,16 @@ html, body
 	font-family: sans-serif;
 }
 
+#message-box
+{
+	position: fixed!important;
+	top: 50%;
+	left:50%;
+	padding:12px;
+	color: #4F8A10;
+	font-size: xx-large;
+}
+
 .title
 {
 	display:block;
@@ -51,9 +61,14 @@ html, body
 }
 
 ul {
-    margin: 0;
+    margin: 0px 0px 0px 20px;
     padding: 0;
     list-style-type: none;
+}
+
+.draggablenote > ul
+{
+	margin: 0;
 }
 
 li {
@@ -61,9 +76,23 @@ li {
 	margin-top: 5px;
 }
 
-ul ul li
+.subtask-icon
 {
-	margin-left:20px;
+	width: 15px;
+	vertical-align: middle;
+	float: left;
+	background-color: inherit;
+	line-height: 1.5em;
+	display: inline-block;
+	height: auto;
+	min-height: 1px;
+/* 	background-image: url("../images/down.png"); */
+}
+
+.expand-image
+{
+	width: 60%;
+	height: auto;
 }
 
 .edit-list-span {
@@ -73,7 +102,7 @@ ul ul li
     font-size: 14px;
     transition: 0.2s;
     line-height: 1.5em;
-    height: auto;
     display: block;
+    overflow:hidden;
 }
 

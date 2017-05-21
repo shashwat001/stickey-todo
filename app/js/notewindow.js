@@ -39,7 +39,9 @@ function getLi(text)
 		$span = $span.text(text);
 	}
 	
-	return $li.append($span);
+	let $icon = $('<span>').addClass('subtask-icon');
+	$li.append($icon).append($span);
+	return $li;
 }
 
 
@@ -65,7 +67,16 @@ function getDataHtml(ulDataArray)
 		let text = liData['text'];
 		let innerUL = liData['data'];
 		let $li = getLi(text);
-		$li.append(getDataHtml(innerUL));
+		if(liData['isDone'])
+		{
+			markTaskDone($li);
+		}
+		let $innerULObj = getDataHtml(innerUL);
+		if($innerULObj)
+		{			
+			$li.append($innerULObj);
+			addSubTaskMarker($li);
+		}
 		$ul.append($li);
 	}
 	return $ul;
@@ -93,6 +104,10 @@ function getLiListData($liList)
 		var liJson = {};
 		liJson['text'] = $(this).children('span').text();
 		liJson['data'] = getData($(this).children('ul'));
+		if($(this).data('done'))
+		{
+			liJson['isDone'] = true;
+		}
 		returnArray.push(liJson);
 	});
 	return returnArray;
@@ -116,6 +131,13 @@ $(document).on('keydown', '.title', function(e) {
 	}
 });
 
+function taskHasSibling($task)
+{
+	if($task.parent('li').siblings('li').length != 0)
+		return true;
+	return false;
+}
+
 $(document).on('keydown', '.edit-list-span', function(e) {
 
 	var keyCode = e.keyCode || e.which; 
@@ -133,12 +155,21 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 		return false;
 	}
 
-	else if (keyCode == KEY_ENTER && e.ctrlKey) //enter
+	else if (keyCode == KEY_ENTER) //enter
 	{
-		var $newLi = getLi();
-		$(this).parent('li').after($newLi);
-		$newLi.children('span').focus();
-		return false;
+		if(e.ctrlKey)
+		{
+			var $newLi = getLi();
+			$(this).parent('li').after($newLi);
+			$newLi.children('span').focus();
+			return false;
+		}
+		else if(e.shiftKey)
+		{
+			let $parLi = $(this).parent('li');
+			toggleSubTaskMarker($parLi);
+			return false;
+		}
 	}
 	else if (keyCode == KEY_TAB) //tab
 	{
@@ -169,9 +200,27 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 	}
 	else if(keyCode == KEY_SPACE && e.ctrlKey)
 	{
-		markTaskDone.call(this);
+		markTaskDone($(this).parent('li'));
 	}
 });
+
+function toggleSubTaskMarker($li)
+{
+	if($li.children('ul').length == 0)
+		return;
+	if($li.children('.subtask-icon').hasClass('expand-icon'))
+	{
+		removeSubTaskMarker($li);
+		addSubTaskMarker($li, 'right');
+		$li.children('ul').hide();
+	}
+	else if($li.children('.subtask-icon').hasClass('collapse-icon'))
+	{
+		removeSubTaskMarker($li);
+		addSubTaskMarker($li, 'down');
+		$li.children('ul').show();
+	}
+}
 
 $(document).on('click', '.edit-list-span', function(e) {
 	$(this).focus();
@@ -264,6 +313,7 @@ function moveInsidePrevSibling($obj)
 	{		
 		$ul = $('<ul>').addClass('myUL');
 		$prev.append($ul);
+		addSubTaskMarker($prev);
 	}
 	else
 	{
@@ -284,7 +334,35 @@ function moveAfterParent($obj)
 	
 	$obj.parent('li').insertAfter($parLI);
 	if($parUL.children('li').length == 0)
+	{
+		removeSubTaskMarker($parLI);
 		$parUL.remove();
+	}
+}
+
+function removeSubTaskMarker($li)
+{
+	$li.children('.subtask-icon').removeClass('expand-icon').empty();
+}
+
+function addSubTaskMarker($li, direction)
+{
+	if(direction === 'right')
+	{
+		$li.children('.subtask-icon').removeClass('expand-icon').addClass('collapse-icon').append(getImg('right'));
+	}
+	else
+	{
+		$li.children('.subtask-icon').removeClass('collapse-icon').addClass('expand-icon').append(getImg('down'));
+	}
+}
+
+function getImg(direction)
+{
+	if(direction === 'down')
+		return $('<img>').addClass('expand-image').attr('src', 'images/down.png');
+	else
+		return $('<img>').addClass('expand-image').attr('src', 'images/right.png');
 }
 
 function handleKeyPress(e)
@@ -392,16 +470,16 @@ function shiftDown($li)
 	$li.children('span').focus();
 }
 
-function markTaskDone()
+function markTaskDone($parentLi)
 {
-	if(!$(this).data('done'))
+	if(!$parentLi.data('done'))
 	{
-		$(this).css('color', '#888888').css('text-decoration', 'line-through');
-		$(this).data('done', true)
+		$parentLi.css('color', '#888888').css('text-decoration', 'line-through');
+		$parentLi.data('done', true)
 	}
 	else
 	{
-		$(this).removeAttr('style');
-		$(this).removeData('done');
+		$parentLi.removeAttr('style');
+		$parentLi.removeData('done');
 	}
 }
