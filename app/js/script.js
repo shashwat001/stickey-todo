@@ -1,10 +1,6 @@
+'use strict';
+
 var notewindow = require('./js/notewindow');
-
-function isEmpty( el ){
-	return !$.trim(el.text())
-}
-
-
 
 $('document').ready(function() {
 	loadFile();
@@ -13,7 +9,6 @@ $('document').ready(function() {
 		$('#notes').append($node);
 		$node.focus();
 	});
-
 });
 
 const {
@@ -37,11 +32,7 @@ function saveData()
 {
 	var notesJsonData = [];
 	$('.draggablenote').each(function(e){
-		var jsonData = {};
-		jsonData['position'] = {'left' : $(this).position().left,
-								'top': $(this).position().top};
-		jsonData['title'] = $(this).children('span').text();
-		jsonData['data'] = getData($(this).children('ul'));
+		let jsonData = notewindow.getSerialized($(this));
 		notesJsonData.push(jsonData);
 	});
 	var data = JSON.stringify(notesJsonData);

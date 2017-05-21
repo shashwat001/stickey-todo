@@ -1,3 +1,5 @@
+'use strict';
+
 function notewindow(savedData)
 {
 	if(savedData)
@@ -69,6 +71,32 @@ function getDataHtml(ulDataArray)
 	return $ul;
 }
 
+notewindow.getSerialized = function($noteWindowObj)
+{
+	var jsonData = {};
+	jsonData['position'] = {'left' : $noteWindowObj.position().left,
+							'top': $noteWindowObj.position().top};
+	jsonData['title'] = $noteWindowObj.children('span').text();
+	jsonData['data'] = getData($noteWindowObj.children('ul'));
+	return jsonData;
+}
+
+function getData($ulObj)
+{
+	var returnObj = getLiListData($ulObj.children('li'));
+	return returnObj;
+}
+
+function getLiListData($liList)
+{	var returnArray = [];
+	$liList.each(function(e){
+		var liJson = {};
+		liJson['text'] = $(this).children('span').text();
+		liJson['data'] = getData($(this).children('ul'));
+		returnArray.push(liJson);
+	});
+	return returnArray;
+}
 
 module.exports = notewindow;
 
@@ -130,7 +158,18 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 	else if(keyCode == KEY_D && e.ctrlKey)
 	{
 		focusPrevious.call(this);
-		$(this).parent('li').remove();	
+		if($(this).siblings().length == 0)
+		{
+			$(this).parent('li').parent('ul').remove();
+		}
+		else
+		{
+			$(this).parent('li').remove();
+		}
+	}
+	else if(keyCode == KEY_SPACE && e.ctrlKey)
+	{
+		markTaskDone.call(this);
 	}
 });
 
@@ -351,4 +390,18 @@ function shiftDown($li)
 		$li.insertAfter($li.next());
 	}
 	$li.children('span').focus();
+}
+
+function markTaskDone()
+{
+	if(!$(this).data('done'))
+	{
+		$(this).css('color', '#888888').css('text-decoration', 'line-through');
+		$(this).data('done', true)
+	}
+	else
+	{
+		$(this).removeAttr('style');
+		$(this).removeData('done');
+	}
 }
