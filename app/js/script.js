@@ -25,7 +25,6 @@ ipcRenderer.on('open-new-note', function(arg) {
 });
 
 var fs = require("fs");
-var path = remote.app.getPath("home") + '/todo-app.txt';
 
 function printMessage(message)
 {
@@ -35,6 +34,7 @@ function printMessage(message)
 
 function saveData()
 {
+	var path = remote.getGlobal('settings').path + '/todo-app.json';
 	var notesJsonData = [];
 	$('.draggablenote').each(function(e){
 		let jsonData = notewindow.getSerialized($(this));
@@ -52,6 +52,7 @@ function saveData()
 
 function loadFile()
 {
+	var path = remote.getGlobal('settings').path + '/todo-app.json';
 	fs.readFile(path, 'utf8', function (err,data) {
 		  if (err) {
 		    return console.log(err);
