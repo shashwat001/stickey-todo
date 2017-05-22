@@ -275,12 +275,26 @@ $(document).on('keydown', '.draggablenote', function(e) {
 		{
 			if(e.shiftKey)
 			{
-				$(this).prev('.draggablenote').focus();
+				if($(this).prev('.draggablenote').length != 0)
+				{
+					$(this).prev('.draggablenote').focus();
+				}
+				else
+				{
+					$(this).siblings('.draggablenote:last').focus();
+				}
 				return false;
 			}
 			else
 			{	
-				$(this).next('.draggablenote').focus();
+				if($(this).next('.draggablenote').length != 0)
+				{
+					$(this).next('.draggablenote').focus();
+				}
+				else
+				{
+					$(this).siblings('.draggablenote:first').focus();
+				}
 				return false;
 			}
 		}
