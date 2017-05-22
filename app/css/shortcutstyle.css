@@ -18,3 +18,8 @@ body
 {
 	padding: 5px 20px;
 }
+
+input[name=path]
+{
+	width: 400px;
+}

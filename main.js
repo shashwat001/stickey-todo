@@ -1,5 +1,6 @@
 'use strict';
 
+
 const {
 	app,
 	BrowserWindow,
@@ -7,7 +8,22 @@ const {
 }  = require('electron');
 
 const electronLocalshortcut = require('electron-localshortcut');
+const fs = require('fs');
 
+global.settingspath = app.getPath('home') + '/.todoconfig';
+global.settingsfilepath = settingspath + '/settings.json';
+
+if (!fs.existsSync(settingspath)){
+    fs.mkdirSync(settingspath, function(error){
+    	if(error)
+		{
+    		console.error('cannot create dir');
+    		app.quit();
+		}
+    });
+}
+	
+	
 app.on('ready', createWindow);
 app.on('will-quit', cleanUp);
 app.on('window-all-closed', function(){
@@ -33,10 +49,28 @@ function createWindow(){
 	    showShortcuts();
 	  })
 //	mainWindow.webContents.openDevTools();
+	  
+	loadSettings();
 }
 
-ipcMain.on('save-settings', (event, arg) => {
-	
+function loadSettings(receiver)
+{
+	fs.readFile(settingsfilepath, 'utf8', function (err,data) {
+		  if (err) {
+		    return console.log(err);
+		  }
+		  var jsonObj = JSON.parse(data);
+		  global.settings = jsonObj;
+		  if(receiver)
+		{
+		  receiver.send('settings-loaded');
+		}
+		});
+
+}
+
+ipcMain.on('load-settings', (event, arg) => {
+	loadSettings(event.sender);
 });
 
 function showShortcuts()

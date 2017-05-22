@@ -11,7 +11,9 @@ const {
 const fs = require('fs');
 
 $(document).ready(function(){	
-	$( "#tabs" ).tabs();	
+	$( "#tabs" ).tabs();
+	
+	loadSettings();
 	
 	$('form').submit(function(){
 		let settings = $(this).serializeArray();
@@ -20,24 +22,36 @@ $(document).ready(function(){
 		{
 			jsonData[pair['name']] = pair['value'];
 		}
-		let saveSettingsDir = jsonData['path'] + '/.todoconfig';
 		
-		if (!fs.existsSync(saveSettingsDir)){
-		    fs.mkdirSync(saveSettingsDir, function(error){
-		    	if(error)
-	    		{
-		    		console.error('cannot create dir');
-	    		}
-		    });
-		}
 		
-		fs.writeFile(saveSettingsDir + '/settings.json', JSON.stringify(jsonData), function(error) {
+		let saveSettingsFilePath = remote.getGlobal('settingsfilepath');
+		
+		fs.writeFile(saveSettingsFilePath, JSON.stringify(jsonData), function(error) {
 		     if (error) {
 		       console.error("write error:  " + error.message);
 		     } else {
+		    	 ipcRenderer.send('load-settings');
 		     }
 		});
 		
 		
 	});
+	
+	$('form input[name=path]').click(function(){
+		let dir = remote.dialog.showOpenDialog({properties: ['openDirectory']});
+		$(this).val(dir);
+	});
+});
+
+function loadSettings()
+{
+	let json = remote.getGlobal('settings');
+	for(let key in json)
+	{
+		$('form input[name=' + key + ']').val(json[key]);
+	}
+}
+
+ipcRenderer.on('settings-loaded', (event, arg) => {
+	loadSettings();
 });
