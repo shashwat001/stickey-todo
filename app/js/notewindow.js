@@ -36,7 +36,7 @@ function getLi(text)
 	.attr('contentEditable', true);
 	if(text)
 	{
-		$span = $span.text(text);
+		$span = $span.html(text);
 	}
 	
 	let $icon = $('<span>').addClass('subtask-icon');
@@ -49,7 +49,7 @@ function populateNode(noteData)
 {
 	let noteDiv = this.node;
 	noteDiv.append(getDataHtml(noteData['data']));
-	noteDiv.children('span').text(noteData['title']);
+	noteDiv.children('span.title').html(noteData['title']);
 	noteDiv.css({
 		top: noteData['position']['top'],
 		left:noteData['position']['left']
@@ -87,7 +87,7 @@ notewindow.getSerialized = function($noteWindowObj)
 	var jsonData = {};
 	jsonData['position'] = {'left' : $noteWindowObj.position().left,
 							'top': $noteWindowObj.position().top};
-	jsonData['title'] = $noteWindowObj.children('span').text();
+	jsonData['title'] = $noteWindowObj.children('span.title').html();
 	jsonData['data'] = getData($noteWindowObj.children('ul'));
 	return jsonData;
 }
@@ -102,7 +102,7 @@ function getLiListData($liList)
 {	var returnArray = [];
 	$liList.each(function(e){
 		var liJson = {};
-		liJson['text'] = $(this).children('span').text();
+		liJson['text'] = $(this).children('span.edit-list-span').html();
 		liJson['data'] = getData($(this).children('ul'));
 		if($(this).data('done'))
 		{
@@ -188,13 +188,18 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 	}
 	else if(keyCode == KEY_D && e.ctrlKey)
 	{
-		focusPrevious.call(this);
-		if($(this).siblings().length == 0)
+		if($(this).parent('li').siblings('li').length == 0)
 		{
-			$(this).parent('li').parent('ul').remove();
+			if($(this).parent('li').parent('ul').parent('li').length != 0)
+			{
+				focusPrevious.call(this);
+				removeSubTaskMarker($(this).parent('li').parent('ul').parent('li'));
+				$(this).parent('li').parent('ul').remove();
+			}
 		}
 		else
 		{
+			focusPrevious.call(this);
 			$(this).parent('li').remove();
 		}
 	}
