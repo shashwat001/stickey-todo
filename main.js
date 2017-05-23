@@ -14,20 +14,20 @@ global.settingspath = app.getPath('home') + '/.todoconfig';
 global.settingsfilepath = settingspath + '/settings.json';
 
 if (!fs.existsSync(settingspath)){
-    fs.mkdirSync(settingspath, function(error){
-    	if(error)
+	fs.mkdirSync(settingspath, function(error){
+		if(error)
 		{
-    		console.error('cannot create dir');
-    		app.quit();
+			console.error('cannot create dir');
+			app.quit();
 		}
-    });
+	});
 }
-	
-	
+
+
 app.on('ready', createWindow);
 app.on('will-quit', cleanUp);
 app.on('window-all-closed', function(){
-    app.quit();
+	app.quit();
 });
 //app.on('before-quit', saveData);
 
@@ -40,32 +40,35 @@ function createWindow(){
 	mainWindow.loadURL('file://' + __dirname + '/app/main.html');
 	
 	electronLocalshortcut.register(mainWindow,'ctrl+S', () => {
-	    mainWindow.webContents.send('saveData');
-	  }) 
+		mainWindow.webContents.send('saveData');
+	}) 
 	electronLocalshortcut.register(mainWindow,'ctrl+T', () => {
-	    mainWindow.webContents.send('open-new-note');
-	  }) 
+		mainWindow.webContents.send('open-new-note');
+	}) 
 	electronLocalshortcut.register(mainWindow,'ctrl+N', () => {
-	    showShortcuts();
-	  })
+		showShortcuts();
+	})
 //	mainWindow.webContents.openDevTools();
-	  
-	loadSettings();
+
+loadSettings();
 }
 
 function loadSettings(receiver)
 {
 	fs.readFile(settingsfilepath, 'utf8', function (err,data) {
-		  if (err) {
-		    return console.log(err);
-		  }
-		  var jsonObj = JSON.parse(data);
-		  global.settings = jsonObj;
-		  if(receiver)
-		{
-		  receiver.send('settings-loaded');
+		if (err) {
+			return console.log(err);
 		}
-		});
+		else
+		{
+			var jsonObj = JSON.parse(data);
+			global.settings = jsonObj;
+			if(receiver)
+			{
+				receiver.send('settings-loaded');
+			}
+		}
+	});
 
 }
 
@@ -79,7 +82,7 @@ function showShortcuts()
 	settingsWindow.loadURL('file://' + __dirname + '/app/shortcuts.html');
 	settingsWindow.once('ready-to-show', () => {
 		settingsWindow.show()
-		})
+	})
 }
 
 

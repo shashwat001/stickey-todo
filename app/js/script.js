@@ -32,16 +32,30 @@ function printMessage(message)
 	$('#message-box').delay(2000).fadeOut('slow');
 }
 
+function getSaveFilePath()
+{
+	let path;
+	if(remote.getGlobal('settings') && remote.getGlobal('settings').path)
+	{
+		path = remote.getGlobal('settings').path + '/todo-app.json';
+	}
+	else
+	{
+		path = remote.getGlobal('settingspath') + '/todo-app.json';
+	}
+	return path;
+}
+
 function saveData()
 {
-	var path = remote.getGlobal('settings').path + '/todo-app.json';
+	
 	var notesJsonData = [];
 	$('.draggablenote').each(function(e){
 		let jsonData = notewindow.getSerialized($(this));
 		notesJsonData.push(jsonData);
 	});
 	var data = JSON.stringify(notesJsonData);
-	fs.writeFile(path, data, function(error) {
+	fs.writeFile(getSaveFilePath(), data, function(error) {
 	     if (error) {
 	       console.error("write error:  " + error.message);
 	     } else {
@@ -52,8 +66,7 @@ function saveData()
 
 function loadFile()
 {
-	var path = remote.getGlobal('settings').path + '/todo-app.json';
-	fs.readFile(path, 'utf8', function (err,data) {
+	fs.readFile(getSaveFilePath(), 'utf8', function (err,data) {
 		  if (err) {
 		    return console.log(err);
 		  }
