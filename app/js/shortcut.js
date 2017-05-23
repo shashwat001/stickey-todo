@@ -37,10 +37,13 @@ $(document).ready(function(){
 		
 	});
 	
-	$('form input[name=path]').click(function(){
+	$('form input[name=path]').dblclick(function(){
 		let dir = remote.dialog.showOpenDialog({properties: ['openDirectory']});
 		$(this).val(dir);
-	});
+	})
+	.click(function(){
+		$(this).select();
+	})
 });
 
 function loadSettings()
