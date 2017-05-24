@@ -71,11 +71,20 @@ function getDataHtml(ulDataArray)
 		{
 			markTaskDone($li);
 		}
-		let $innerULObj = getDataHtml(innerUL);
-		if($innerULObj)
-		{			
+		if(innerUL)
+		{
+			let $innerULObj = getDataHtml(innerUL);		
 			$li.append($innerULObj);
-			addSubTaskMarker($li);
+			
+			if(liData['collapsed'])
+			{
+				hideSubTasks($li);
+				addSubTaskMarker($li, 'right');
+			}
+			else
+			{
+				addSubTaskMarker($li);				
+			}
 		}
 		$ul.append($li);
 	}
@@ -88,14 +97,8 @@ notewindow.getSerialized = function($noteWindowObj)
 	jsonData['position'] = {'left' : $noteWindowObj.position().left,
 							'top': $noteWindowObj.position().top};
 	jsonData['title'] = $noteWindowObj.children('span.title').html();
-	jsonData['data'] = getData($noteWindowObj.children('ul'));
+	jsonData['data'] = getLiListData($noteWindowObj.children('ul').children('li'));
 	return jsonData;
-}
-
-function getData($ulObj)
-{
-	var returnObj = getLiListData($ulObj.children('li'));
-	return returnObj;
 }
 
 function getLiListData($liList)
@@ -103,7 +106,16 @@ function getLiListData($liList)
 	$liList.each(function(e){
 		var liJson = {};
 		liJson['text'] = $(this).children('span.edit-list-span').html();
-		liJson['data'] = getData($(this).children('ul'));
+		
+		if($(this).children('ul').length != 0)
+		{			
+			liJson['data'] = getLiListData($(this).children('ul').children('li'));
+			if(isCollapsed($(this)))
+			{
+				liJson['collapsed'] = true;
+			}
+		}
+		
 		if($(this).data('done'))
 		{
 			liJson['isDone'] = true;
@@ -209,6 +221,16 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 	}
 });
 
+function hideSubTasks($li)
+{
+	$li.children('ul').hide();
+}
+
+function showSubTasks($li)
+{
+	$li.children('ul').show();
+}
+
 function toggleSubTaskMarker($li)
 {
 	if($li.children('ul').length == 0)
@@ -217,13 +239,13 @@ function toggleSubTaskMarker($li)
 	{
 		removeSubTaskMarker($li);
 		addSubTaskMarker($li, 'right');
-		$li.children('ul').hide();
+		hideSubTasks($li);
 	}
 	else if($li.children('.subtask-icon').hasClass('collapse-icon'))
 	{
 		removeSubTaskMarker($li);
 		addSubTaskMarker($li, 'down');
-		$li.children('ul').show();
+		showSubTasks($li);
 	}
 }
 
