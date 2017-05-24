@@ -376,6 +376,11 @@ function addSubTaskMarker($li, direction)
 	}
 }
 
+function isCollapsed($li)
+{
+	return $li.children('.subtask-icon').hasClass('.collapse-icon');
+}
+
 function getImg(direction)
 {
 	if(direction === 'down')
@@ -433,9 +438,9 @@ function focusPrevious()
 
 function getNextList($li, moveUp)
 {
-	if(!moveUp && $li.children('ul').length != 0)	
+	if(!moveUp && !isCollapsed($li) && $li.children('ul').length != 0)	
 	{
-		return $li.children('ul').children('li').first();
+		return $li.children('ul').children('li').first();	
 	}
 
 	else if($li.next('li').length != 0)
