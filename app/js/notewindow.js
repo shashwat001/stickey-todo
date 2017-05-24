@@ -431,7 +431,6 @@ function handleKeyPress(e)
 		if(keyCode == KEY_DOWN)
 		{
 			let $nextLi = getNextList($(this).parent('li'), false);
-			console.log($nextLi);
 			if($nextLi)
 			{
 				$nextLi.children('span').focus();
@@ -447,7 +446,6 @@ function handleKeyPress(e)
 function focusPrevious()
 {
 	let $prevLi = getPreviousList($(this).parent('li'), false);
-	console.log($prevLi);
 	if($prevLi.length != 0)
 	{
 		$prevLi.children('span').focus();

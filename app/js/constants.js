@@ -14,3 +14,4 @@ let KEY_UP = 38;
 let KEY_RIGHT = 39;
 let KEY_DOWN = 40;
 let KEY_D = 68;
+let KEY_F = 70;

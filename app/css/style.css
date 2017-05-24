@@ -43,6 +43,12 @@ html, body
 	font-family: sans-serif;
 }
 
+#plus
+{
+	display: inline-block;
+	width: 10px;
+}
+
 #message-box
 {
 	position: fixed!important;
@@ -51,6 +57,16 @@ html, body
 	padding:12px;
 	color: #fff;
 	font-size: xx-large;
+}
+
+#search-input
+{
+	display: inline-block;
+	width: 30%;
+	border: 1px solid black;
+	height: 20px;
+	margin: 2px 5px;
+	float: right;
 }
 
 .title

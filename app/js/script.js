@@ -26,11 +26,31 @@ ipcRenderer.on('open-new-note', function(arg) {
 
 var fs = require("fs");
 
+let webContents = remote.getCurrentWebContents();
+
 function printMessage(message)
 {
 	$('#message-box').text(message).fadeIn('slow');;
 	$('#message-box').delay(2000).fadeOut('slow');
 }
+
+$(document).on('keydown', 'body', function(e) {
+	let keyCode = e.keyCode || e.which;
+	if(keyCode == KEY_F && e.ctrlKey)
+	{
+		$('#search-input').focus();
+	}
+	console.log(webContents.findInPage('SSL'));
+});
+
+webContents.on('found-in-page', (event, result) => {
+		console.log(result.selectionArea.height)
+		console.log(result.selectionArea.width)
+		console.log(result.selectionArea.x)
+		console.log(result.selectionArea.y)
+	  if (result.finalUpdate) webContents.stopFindInPage('clearSelection')
+})
+
 
 function getSaveFilePath()
 {
