@@ -378,7 +378,7 @@ function addSubTaskMarker($li, direction)
 
 function isCollapsed($li)
 {
-	return $li.children('.subtask-icon').hasClass('.collapse-icon');
+	return $li.children('.subtask-icon').hasClass('collapse-icon');
 }
 
 function getImg(direction)
@@ -436,18 +436,38 @@ function focusPrevious()
 	}
 }
 
+function hasSubTasks($li)
+{
+	return $li.children('ul').length != 0;
+}
+
+function hasNextTask($li)
+{
+	return $li.next('li').length != 0;
+}
+
+function hasParentTask($li)
+{
+	return $li.parent('ul').parent('li').length != 0
+}
+
+function hasPreviousTask($li)
+{
+	return $li.prev('li').length != 0;
+}
+
 function getNextList($li, moveUp)
 {
-	if(!moveUp && !isCollapsed($li) && $li.children('ul').length != 0)	
+	if(!moveUp && hasSubTasks($li) && !isCollapsed($li))	
 	{
 		return $li.children('ul').children('li').first();	
 	}
 
-	else if($li.next('li').length != 0)
+	else if(hasNextTask($li))
 	{
 		return $li.next('li');
 	}
-	else if($li.parent('ul').parent('li').length != 0)
+	else if(hasParentTask($li))
 	{
 		return getNextList($li.parent('ul').parent('li'), true);
 	}
@@ -459,14 +479,14 @@ function getPreviousList($li, moveDown)
 
 	if(moveDown)
 	{
-		if($li.children('ul').length != 0)
+		if(hasSubTasks($li) && !isCollapsed($li))
 		{
 			return getPreviousList($li.children('ul').children('li').last(), true);
 		}
 		return $li;
 	}
 
-	if($li.prev('li').length != 0)
+	if(hasPreviousTask($li))
 	{
 		return getPreviousList($li.prev('li'), true);
 	}
