@@ -131,7 +131,7 @@ module.exports = notewindow;
 
 $(document).on('keydown', '.title', function(e) {
 	var keyCode = e.keyCode || e.which;
-	if(keyCode == KEY_DOWN && e.ctrlKey)
+	if(keyCode == KEY_DOWN && isCmdOrCtrl(e))
 	{
 		$(this).next('ul').children('li').first().children('span').focus();
 	}
@@ -169,7 +169,7 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 
 	else if (keyCode == KEY_ENTER) //enter
 	{
-		if(e.ctrlKey)
+		if(isCmdOrCtrl(e))
 		{
 			var $newLi = getLi();
 			$(this).parent('li').after($newLi);
@@ -198,7 +198,7 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 			return false;
 		}
 	}
-	else if(keyCode == KEY_D && e.ctrlKey)
+	else if(keyCode == KEY_D && isCmdOrCtrl(e))
 	{
 		if($(this).parent('li').siblings('li').length == 0)
 		{
@@ -215,7 +215,7 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 			$(this).parent('li').remove();
 		}
 	}
-	else if(keyCode == KEY_SPACE && e.ctrlKey)
+	else if(keyCode == KEY_SPACE && isCmdOrCtrl(e))
 	{
 		markTaskDone($(this).parent('li'));
 	}
@@ -276,7 +276,7 @@ $(document).on('keydown', '.draggablenote', function(e) {
 		
 		if(keyCode >= KEY_LEFT && keyCode <= KEY_DOWN)
 		{
-			if(e.ctrlKey)
+			if(isCmdOrCtrl(e))
 			{
 				let offset = 15;
 				if(keyCode == KEY_LEFT)
@@ -334,7 +334,7 @@ $(document).on('keydown', '.draggablenote', function(e) {
 		
 		else if(keyCode == KEY_D) //d
 		{
-			if(e.ctrlKey)
+			if(isCmdOrCtrl(e))
 			{
 				$(this).remove();
 				$('.draggablenote').first().focus();
@@ -415,7 +415,7 @@ function handleKeyPress(e)
 {
 	var keyCode = e.keyCode || e.which;
 	
-	if(e.ctrlKey && e.shiftKey)
+	if(isCmdOrCtrl(e) && e.shiftKey)
 	{
 		if(keyCode == KEY_DOWN)
 		{
@@ -426,7 +426,7 @@ function handleKeyPress(e)
 			shiftUp($(this).parent('li'));
 		}
 	}
-	else if(e.ctrlKey)
+	else if(isCmdOrCtrl(e))
 	{
 		if(keyCode == KEY_DOWN)
 		{
@@ -548,4 +548,14 @@ function markTaskDone($parentLi)
 		$parentLi.removeAttr('style');
 		$parentLi.removeData('done');
 	}
+}
+
+function isCmdOrCtrl(e)
+{
+	return e.ctrlKey || isCommandPressed(e);
+}
+
+function isCommandPressed(event) 
+{
+	return event.metaKey && ! event.ctrlKey;
 }
