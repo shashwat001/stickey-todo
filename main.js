@@ -35,7 +35,7 @@ let mainWindow;
 
 function createWindow(){
 	mainWindow = new BrowserWindow();
-	mainWindow.maximize();
+	// mainWindow.maximize();
 	
 	mainWindow.loadURL('file://' + __dirname + '/app/main.html');
 	

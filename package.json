@@ -13,7 +13,6 @@
     "electron": "",
     "electron-localshortcut": "",
     "jquery": "",
-    "jquery-ui": "",
-    "electron-packager": "~8.7.0"
+    "jquery-ui": ""
   }
 }
