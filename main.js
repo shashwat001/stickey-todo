@@ -35,17 +35,18 @@ let mainWindow;
 
 function createWindow(){
 	mainWindow = new BrowserWindow();
-	mainWindow.maximize();
+
+	// mainWindow.maximize();
 	
 	mainWindow.loadURL('file://' + __dirname + '/app/main.html');
 	
-	electronLocalshortcut.register(mainWindow,'ctrl+S', () => {
+	electronLocalshortcut.register(mainWindow,'CmdOrCtrl+S', () => {
 		mainWindow.webContents.send('saveData');
 	}) 
-	electronLocalshortcut.register(mainWindow,'ctrl+T', () => {
+	electronLocalshortcut.register(mainWindow,'CmdOrCtrl+T', () => {
 		mainWindow.webContents.send('open-new-note');
 	}) 
-	electronLocalshortcut.register(mainWindow,'ctrl+N', () => {
+	electronLocalshortcut.register(mainWindow,'CmdOrCtrl+N', () => {
 		showShortcuts();
 	})
 //	mainWindow.webContents.openDevTools();
