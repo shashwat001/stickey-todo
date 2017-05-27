@@ -24,7 +24,7 @@ if (!fs.existsSync(settingspath)){
 }
 
 
-app.on('ready', createWindow);
+app.on('ready', startUp);
 app.on('will-quit', cleanUp);
 app.on('window-all-closed', function(){
 	app.quit();
@@ -33,10 +33,16 @@ app.on('window-all-closed', function(){
 
 let mainWindow;
 
+function startUp()
+{
+	createWindow();
+//	setAppLevelShortcuts();
+}
+
 function createWindow(){
 	mainWindow = new BrowserWindow();
 
-	// mainWindow.maximize();
+	 mainWindow.maximize();
 	
 	mainWindow.loadURL('file://' + __dirname + '/app/main.html');
 	
@@ -51,10 +57,17 @@ function createWindow(){
 	})
 //	mainWindow.webContents.openDevTools();
 
-loadSettings();
+	reloadSettings();
 }
 
-function loadSettings(receiver)
+function setAppLevelShortcuts()
+{
+	electronLocalshortcut.register('CmdOrCtrl+Alt+Super+Right', () => {
+		console.log('move captured')
+	})
+}
+
+function reloadSettings(receiver)
 {
 	fs.readFile(settingsfilepath, 'utf8', function (err,data) {
 		if (err) {

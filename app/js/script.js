@@ -6,7 +6,7 @@ $('document').ready(function() {
 	loadFile();
 	$('#plus').click(function() {
 		let $node = new notewindow().node
-		$('#notes').append($node);
+		$('.board').append($node);
 		$node.focus();
 	});
 });
@@ -75,7 +75,7 @@ function loadFile()
 		  for(let noteData of jsonObj)
 	  		{
 	  			let noteDiv = new notewindow(noteData).node
-  				$('#notes').append(noteDiv);
+  				$('.board').append(noteDiv);
 	  		}
 
 		});

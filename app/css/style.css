@@ -37,7 +37,7 @@ html, body
 	background: #fff;
 }
 
-#notes
+.board
 {
 	width:100%;
 	height: 100%;
