@@ -139,3 +139,26 @@ li {
     /*color: #222;*/
 }
 
+.move-option-dropdown
+{
+	z-index: 1000;
+	position:absolute !important;
+	top:100px;
+	left:100px;
+  	margin: 0 auto;
+  	background: #ecf0f1;
+  	margin-bottom: 1em; // Cosmetic value
+}
+
+.move-option-dropdown li
+{
+	line-height: 20px;
+	margin: 2px 2px;
+	padding: 2px 10px;
+	background: #bdc3c7;
+}
+
+.move-option-dropdown li:FOCUS
+{
+	background: #fff;
+}

@@ -53,6 +53,35 @@ $(document).on('keydown','#board-name', function(e)
 	}
 });
 
+$(document).on('keydown','.move-option-dropdown li', function(e)
+{
+	let keyCode = e.keyCode || e.which;
+	if(keyCode == KEY_TAB)
+	{
+		if($(this).next().length != 0)
+		{
+			$(this).next().focus();
+		}
+		else
+		{
+			$(this).parent().children().first().focus();
+		}
+		return false;
+	}
+	
+	else if(keyCode == KEY_ENTER)
+	{
+		let $li = $(this).parent().data('li');
+		let newBoardIndex = $(this).data('boardIndex');
+		$li.appendTo(boards[newBoardIndex].$dom)
+		displayBoard(boards[newBoardIndex]);
+		$li.focus();
+		$('.move-option-dropdown').empty();
+		$('.move-option-dropdown').hide();
+		return false;
+	}
+});
+
 function deleteCurrentBoard()
 {
 	if(boards.length > 1)
@@ -75,6 +104,23 @@ function createNewBoard()
 	displayBoard(newBoard);
 	$('#board-name').val('');
 	$('#board-name').focus();
+}
+
+function showBoardSelect($li)
+{
+	$('.move-option-dropdown').show();
+	$('.move-option-dropdown').css({top:$li.position().top, left:$li.position().left})
+	for(let i = 0;i < boards.length;i++)
+	{
+		if(i == currIndex)
+		{
+			continue;
+		}
+		$('.move-option-dropdown').append($('<li>').attr('tabindex', '-1').text(boards[i].boardName).data('boardIndex', i));
+	}
+	$('.move-option-dropdown').children().first().focus();
+	$('.move-option-dropdown').data('li', $li);
+	
 }
 
 function displayBoard(boardToShow)

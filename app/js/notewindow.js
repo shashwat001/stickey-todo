@@ -342,6 +342,12 @@ $(document).on('keydown', '.draggablenote', function(e) {
 				return false;
 			}
 		}
+		
+		else if(isCmdOrCtrl(e) && keyCode == KEY_H)
+		{
+			console.log(boards.length);
+			showBoardSelect($(this));			
+		}
 	}
 });
 
