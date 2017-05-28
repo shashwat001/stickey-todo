@@ -2,6 +2,9 @@
 
 var Board = require('./js/board');
 
+let boards = [];
+let currIndex = 0;
+
 var $currentBoard;
 
 $('document').ready(function() 
@@ -14,10 +17,67 @@ $('document').ready(function()
 	});
 });
 
-function createNewBoard()
+$(document).on('keydown','body', function(e)
 {
-	$currentBoard = new Board();
-	$('#boards').append($currentBoard.$dom);
+	let keyCode = e.keyCode || e.which;
+	if(e.ctrlKey && keyCode == KEY_B)
+	{
+		console.log('new board request');
+		let newboard = createNewBoard();
+	}
+	
+	else if(e.ctrlKey && e.altKey && keyCode ==  KEY_RIGHT)
+	{
+		showNextBoard();
+	}
+});
+
+function createNewBoard()
+{	
+	let newBoard = createBoard();
+	displayBoard(newBoard);
+}
+
+function displayBoard(boardToShow)
+{
+	for(let i = 0;i < boards.length;i++)
+	{
+		let board = boards[i];
+		if(boardToShow == board)
+		{
+			board.show();
+			$currentBoard = board;
+			currIndex = i;
+		}
+		else
+		{
+			board.hide();
+		}
+	}
+}
+
+function showNextBoard()
+{
+	$currentBoard.hide();
+	currIndex = (currIndex + 1)%boards.length;
+	$currentBoard = boards[currIndex];
+	$currentBoard.show();
+}
+
+function showPreviousBoard()
+{
+	$currentBoard.hide();
+	currIndex = (currIndex - 1 + boards.length)%boards.length;
+	$currentBoard = boards[currIndex];
+	$currentBoard.show();
+}
+
+function createBoard(boardData)
+{
+	let newBoard = new Board(boardData);
+	boards.push(newBoard);
+	$('#boards').append(newBoard.$dom);
+	return newBoard;
 }
 
 const {
@@ -63,7 +123,10 @@ function saveData()
 // let jsonData = notewindow.getSerialized($(this));
 // boardsJsonData.push(jsonData);
 // });
-	boardsJsonData.push($currentBoard.getSerializedData())
+	for(let board of boards)
+	{		
+		boardsJsonData.push(board.getSerializedData())
+	}
 	
 	var data = JSON.stringify(boardsJsonData);
 	fs.writeFile(getSaveFilePath(), data, function(error) {
@@ -91,11 +154,29 @@ function loadFile()
 		for(let boardData of jsonObj)
   		{
 			console.log(boardData)
-  			$currentBoard = new Board(boardData);
-			$('#boards').append($currentBoard.$dom);
+  			createBoard(boardData);
   		}
+		initParameters();
 	});
 }
 
+function initParameters()
+{
+	for(let i = 0;i < boards.length;i++)
+	{
+		let board = boards[i];
+		if(board.isShown() == true)
+		{
+			board.show();
+			$currentBoard = board;
+			currIndex = i;
+		}
+		else
+		{
+			board.hide();
+		}
+	}
+
+}
 
 

@@ -9,9 +9,17 @@ function Board(savedData)
 {
 	this.$dom = $('<div>').addClass('board');
 	this.$notes = [];
-	if(saveData)
+	if(savedData)
 	{
-		for(let noteData of savedData)
+		if(savedData['show'] == true)
+		{
+			this.show();
+		}
+		else
+		{
+			this.hide();
+		}
+		for(let noteData of savedData['data'])
 		{
 			addNote.call(this, noteData);
 		}
@@ -32,15 +40,37 @@ function addNote(noteData)
 	return note.node	;
 }
 
+Board.prototype.show = function()
+{
+	this.shown = true;
+	this.$dom.show();
+}
+
+Board.prototype.isShown = function()
+{
+	return this.shown;
+}
+
+Board.prototype.hide = function()
+{
+	this.shown = false;
+	this.$dom.hide();
+}
+
 Board.prototype.getSerializedData = function()
 {
-	let boardJsonData = [];
+	let boardJsonData = {};
+	if(this.isShown() == true)
+	{
+		boardJsonData['show'] = true;
+	}
+	let notesJsonData = [];
 	for(let $note of this.$notes)
 	{
 		let jsonData = $note.getSerialized();
-		boardJsonData.push(jsonData);
+		notesJsonData.push(jsonData);
 	}
-	
+	boardJsonData['data'] = notesJsonData;
 	return boardJsonData;
 }
 
