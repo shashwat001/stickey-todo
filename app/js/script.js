@@ -22,7 +22,14 @@ $(document).on('keydown','body', function(e)
 	let keyCode = e.keyCode || e.which;
 	if(isCmdOrCtrl(e) && keyCode == KEY_B)
 	{
-		let newboard = createNewBoard();
+		if(e.shiftKey)
+		{
+			deleteCurrentBoard();
+		}
+		else
+		{	
+			createNewBoard();
+		}
 	}
 	
 	else if(e.altKey && keyCode ==  KEY_RIGHT)
@@ -36,10 +43,38 @@ $(document).on('keydown','body', function(e)
 	}
 });
 
+$(document).on('keydown','#board-name', function(e)
+{
+	let keyCode = e.keyCode || e.which;
+	if(keyCode == KEY_ENTER)
+	{
+		$currentBoard.setBoardName($(this).val());
+		$currentBoard.newFocus();
+	}
+});
+
+function deleteCurrentBoard()
+{
+	if(boards.length > 1)
+	{
+		let boardToRemove = $currentBoard;
+		for(let i = currIndex; i < boards.length - 1;i++)
+		{
+			boards[i] = boards[i+1];
+		}
+		boards.splice(-1,1);
+		showPreviousBoard();
+		boardToRemove.$dom.remove();
+		boardToRemove = undefined;
+	}
+}
+
 function createNewBoard()
 {	
 	let newBoard = createBoard();
 	displayBoard(newBoard);
+	$('#board-name').val('');
+	$('#board-name').focus();
 }
 
 function displayBoard(boardToShow)
@@ -65,6 +100,7 @@ function showNextBoard()
 	$currentBoard.hide();
 	currIndex = (currIndex + 1)%boards.length;
 	$currentBoard = boards[currIndex];
+	$('#board-name').val($currentBoard.boardName);
 	$currentBoard.show();
 }
 
@@ -73,6 +109,7 @@ function showPreviousBoard()
 	$currentBoard.hide();
 	currIndex = (currIndex - 1 + boards.length)%boards.length;
 	$currentBoard = boards[currIndex];
+	$('#board-name').val($currentBoard.boardName);
 	$currentBoard.show();
 }
 
@@ -171,6 +208,7 @@ function initParameters()
 			board.show();
 			$currentBoard = board;
 			currIndex = i;
+			$('#board-name').val($currentBoard.boardName);
 		}
 		else
 		{

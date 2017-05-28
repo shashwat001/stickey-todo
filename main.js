@@ -55,7 +55,7 @@ function createWindow(){
 	electronLocalshortcut.register(mainWindow,'CmdOrCtrl+N', () => {
 		showShortcuts();
 	})
-	mainWindow.webContents.openDevTools();
+//	mainWindow.webContents.openDevTools();
 
 	reloadSettings();
 }

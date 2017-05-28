@@ -8,8 +8,10 @@ var notewindow = require('./notewindow');
 function Board(savedData)
 {
 	this.$dom = $('<div>').addClass('board');
+	this.boardName = '';
 	if(savedData)
 	{
+		this.boardName = savedData['boardName'];
 		if(savedData['show'] == true)
 		{
 			this.show();
@@ -58,6 +60,8 @@ Board.prototype.hide = function()
 Board.prototype.getSerializedData = function()
 {
 	let boardJsonData = {};
+	
+	boardJsonData['boardName'] = this.boardName;
 	if(this.isShown() == true)
 	{
 		boardJsonData['show'] = true;
@@ -80,6 +84,16 @@ Board.prototype.getSerializedData = function()
 	}
 	boardJsonData['data'] = notesJsonData;
 	return boardJsonData;
+}
+
+Board.prototype.setBoardName = function(boardName)
+{
+	this.boardName = boardName;
+}
+
+Board.prototype.newFocus = function()
+{
+	this.$dom.children('.draggablenote').first().focus();
 }
 
 module.exports = Board;
