@@ -76,10 +76,21 @@ $(document).on('keydown','.move-option-dropdown li', function(e)
 		$li.appendTo(boards[newBoardIndex].$dom)
 		displayBoard(boards[newBoardIndex]);
 		$li.focus();
-		$('.move-option-dropdown').empty();
-		$('.move-option-dropdown').hide();
 		return false;
 	}
+	
+	else if(keyCode == KEY_ESCAPE)
+	{
+		$(this).trigger('focusout');
+		return false;
+	}
+});
+
+$(document).on('focusout','.move-option-dropdown li', function(e)
+{
+	$('.move-option-dropdown').removeData();
+	$('.move-option-dropdown').empty();
+	$('.move-option-dropdown').hide();
 });
 
 function deleteCurrentBoard()
