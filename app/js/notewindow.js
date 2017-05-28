@@ -91,9 +91,10 @@ function getDataHtml(ulDataArray)
 	return $ul;
 }
 
-notewindow.getSerialized = function($noteWindowObj)
+notewindow.prototype.getSerialized = function()
 {
 	var jsonData = {};
+	let $noteWindowObj = this.node;
 	jsonData['position'] = {'left' : $noteWindowObj.position().left,
 							'top': $noteWindowObj.position().top};
 	jsonData['title'] = $noteWindowObj.children('span.title').html();

@@ -1,15 +1,24 @@
 'use strict';
 
-var notewindow = require('./js/notewindow');
+var Board = require('./js/board');
 
-$('document').ready(function() {
+var $currentBoard;
+
+$('document').ready(function() 
+{
 	loadFile();
-	$('#plus').click(function() {
-		let $node = new notewindow().node
-		$('.board').append($node);
-		$node.focus();
+//	createNewBoard();
+	$('#plus').click(function() 
+	{
+		$currentBoard.addNewNote();
 	});
 });
+
+function createNewBoard()
+{
+	$currentBoard = new Board();
+	$('#boards').append($currentBoard.$dom);
+}
 
 const {
 	ipcRenderer,
@@ -49,12 +58,14 @@ function getSaveFilePath()
 function saveData()
 {
 	
-	var notesJsonData = [];
-	$('.draggablenote').each(function(e){
-		let jsonData = notewindow.getSerialized($(this));
-		notesJsonData.push(jsonData);
-	});
-	var data = JSON.stringify(notesJsonData);
+	var boardsJsonData = [];
+// $('.draggablenote').each(function(e){
+// let jsonData = notewindow.getSerialized($(this));
+// boardsJsonData.push(jsonData);
+// });
+	boardsJsonData.push($currentBoard.getSerializedData())
+	
+	var data = JSON.stringify(boardsJsonData);
 	fs.writeFile(getSaveFilePath(), data, function(error) {
 	     if (error) {
 	       console.error("write error:  " + error.message);
@@ -66,20 +77,24 @@ function saveData()
 
 function loadFile()
 {
-	fs.readFile(getSaveFilePath(), 'utf8', function (err,data) {
-		  if (err) {
-		    return console.log(err);
-		  }
-		  var jsonObj = JSON.parse(data);
+	fs.readFile(getSaveFilePath(), 'utf8', function (err,data) 
+	{
+		if (err) 
+		{
+		    console.log(err);
+		    createNewBoard();
+		    return;
+		}
+		var jsonObj = JSON.parse(data);
+		console.log(jsonObj);
 
-		  for(let noteData of jsonObj)
-	  		{
-	  			let noteDiv = new notewindow(noteData).node
-  				$('.board').append(noteDiv);
-	  		}
-
-		});
-
+		for(let boardData of jsonObj)
+  		{
+			console.log(boardData)
+  			$currentBoard = new Board(boardData);
+			$('#boards').append($currentBoard.$dom);
+  		}
+	});
 }
 
 
