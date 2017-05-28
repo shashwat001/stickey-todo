@@ -56,7 +56,7 @@ $(document).on('keydown','#board-name', function(e)
 $(document).on('keydown','.move-option-dropdown li', function(e)
 {
 	let keyCode = e.keyCode || e.which;
-	if(keyCode == KEY_TAB)
+	if(keyCode == KEY_TAB || keyCode == KEY_DOWN)
 	{
 		if($(this).next().length != 0)
 		{
@@ -65,6 +65,19 @@ $(document).on('keydown','.move-option-dropdown li', function(e)
 		else
 		{
 			$(this).parent().children().first().focus();
+		}
+		return false;
+	}
+	
+	else if((e.shiftKey && keyCode == KEY_TAB) || keyCode == KEY_UP)
+	{
+		if($(this).prev().length != 0)
+		{
+			$(this).prev().focus();
+		}
+		else
+		{
+			$(this).parent().children().last().focus();
 		}
 		return false;
 	}
@@ -81,12 +94,12 @@ $(document).on('keydown','.move-option-dropdown li', function(e)
 	
 	else if(keyCode == KEY_ESCAPE)
 	{
-		$(this).trigger('focusout');
+		$(this).trigger('hover');
 		return false;
 	}
 });
 
-$(document).on('focusout','.move-option-dropdown li', function(e)
+$(document).on('hover','.move-option-dropdown', function(e)
 {
 	$('.move-option-dropdown').removeData();
 	$('.move-option-dropdown').empty();
