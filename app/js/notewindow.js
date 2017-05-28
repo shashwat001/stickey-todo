@@ -1,7 +1,8 @@
 'use strict';
 
-function notewindow(savedData)
+function notewindow(parentBoard, savedData)
 {
+	this.parent = parentBoard;
 	if(savedData)
 	{
 		this.node = createNote(true);
@@ -91,10 +92,9 @@ function getDataHtml(ulDataArray)
 	return $ul;
 }
 
-notewindow.prototype.getSerialized = function()
+notewindow.getSerialized = function($noteWindowObj)
 {
 	var jsonData = {};
-	let $noteWindowObj = this.node;
 	jsonData['position'] = {'left' : $noteWindowObj.position().left,
 							'top': $noteWindowObj.position().top};
 	jsonData['title'] = $noteWindowObj.children('span.title').html();
@@ -277,7 +277,7 @@ $(document).on('keydown', '.draggablenote', function(e) {
 		
 		if(keyCode >= KEY_LEFT && keyCode <= KEY_DOWN)
 		{
-			if(isCmdOrCtrl(e))
+			if(isCmdOrCtrl(e) && !e.altKey)
 			{
 				let offset = 15;
 				if(keyCode == KEY_LEFT)
@@ -296,8 +296,8 @@ $(document).on('keydown', '.draggablenote', function(e) {
 				{
 					$(this).css('top', '+=' + offset)
 				}
+				return false;
 			}
-			return false;
 		}
 		else if (keyCode == KEY_TAB) //tab
 		{
@@ -549,14 +549,4 @@ function markTaskDone($parentLi)
 		$parentLi.removeAttr('style');
 		$parentLi.removeData('done');
 	}
-}
-
-function isCmdOrCtrl(e)
-{
-	return e.ctrlKey || isCommandPressed(e);
-}
-
-function isCommandPressed(event) 
-{
-	return event.metaKey && ! event.ctrlKey;
 }

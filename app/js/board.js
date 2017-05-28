@@ -8,7 +8,6 @@ var notewindow = require('./notewindow');
 function Board(savedData)
 {
 	this.$dom = $('<div>').addClass('board');
-	this.$notes = [];
 	if(savedData)
 	{
 		if(savedData['show'] == true)
@@ -34,8 +33,7 @@ Board.prototype.addNewNote = function(noteData)
 
 function addNote(noteData)
 {
-	let note = new notewindow(noteData);
-	this.$notes.push(note);
+	let note = new notewindow(this,noteData);
 	this.$dom.append(note.node);
 	return note.node	;
 }
@@ -64,11 +62,21 @@ Board.prototype.getSerializedData = function()
 	{
 		boardJsonData['show'] = true;
 	}
-	let notesJsonData = [];
-	for(let $note of this.$notes)
+	else
 	{
-		let jsonData = $note.getSerialized();
+		this.$dom.show();
+	}
+	let notesJsonData = [];
+
+	this.$dom.children('.draggablenote').each(function()
+	{
+		let jsonData = notewindow.getSerialized($(this));
 		notesJsonData.push(jsonData);
+	});
+	
+	if(!this.isShown() == true)
+	{
+		this.$dom.hide();
 	}
 	boardJsonData['data'] = notesJsonData;
 	return boardJsonData;

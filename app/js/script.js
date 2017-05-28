@@ -20,15 +20,19 @@ $('document').ready(function()
 $(document).on('keydown','body', function(e)
 {
 	let keyCode = e.keyCode || e.which;
-	if(e.ctrlKey && keyCode == KEY_B)
+	if(isCmdOrCtrl(e) && keyCode == KEY_B)
 	{
-		console.log('new board request');
 		let newboard = createNewBoard();
 	}
 	
-	else if(e.ctrlKey && e.altKey && keyCode ==  KEY_RIGHT)
+	else if(e.altKey && keyCode ==  KEY_RIGHT)
 	{
 		showNextBoard();
+	}
+	
+	else if(e.altKey && keyCode ==  KEY_LEFT)
+	{
+		showPreviousBoard();
 	}
 });
 
@@ -144,16 +148,13 @@ function loadFile()
 	{
 		if (err) 
 		{
-		    console.log(err);
 		    createNewBoard();
 		    return;
 		}
 		var jsonObj = JSON.parse(data);
-		console.log(jsonObj);
 
 		for(let boardData of jsonObj)
   		{
-			console.log(boardData)
   			createBoard(boardData);
   		}
 		initParameters();

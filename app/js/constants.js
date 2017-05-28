@@ -15,3 +15,13 @@ let KEY_RIGHT = 39;
 let KEY_DOWN = 40;
 let KEY_B = 66;
 let KEY_D = 68;
+
+function isCmdOrCtrl(e)
+{
+	return e.ctrlKey || isCommandPressed(e);
+}
+
+function isCommandPressed(event) 
+{
+	return event.metaKey && ! event.ctrlKey;
+}
