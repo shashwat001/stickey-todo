@@ -1,10 +1,18 @@
 {
-  "name": "sticky_todo",
-  "productName": "Highly Customizable Todo App",
-  "version": "0.0.1",
+  "name": "stickey-todo",
+  "productName": "Stickey Todo",
+  "version": "1.0.0",
   "main": "main.js",
-  "author": "myself",
-  "description": "cute todo ",
+  "author": "Shashwat Kumar",
+  "description": "Todo app for keyboard junkies",
+  "keywords": ["todo","todoapp","todolist","notes","note-taking","trello","checkvist"],
+  "homepage": "https://github.com/shashwat001/todo-app",
+  "bugs": "https://github.com/shashwat001/todo-app/issues",
+  "repository": { 
+	  "type" : "git", 
+	  "url" : "https://github.com/shashwat001/todo-app"
+  },
+  "license": "GPL-3.0",
   "scripts": {
     "start": "electron .",
     "package": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=icons/todo-add.ico --prune=true --out=release-builds"
