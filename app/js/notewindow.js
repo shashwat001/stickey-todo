@@ -72,6 +72,11 @@ function getDataHtml(ulDataArray)
 		{
 			markTaskDone($li);
 		}
+		if(liData['color'])
+		{
+			$li.children('span.edit-list-span').addClass('hascolor');
+			$li.children('span.edit-list-span').css('background', liData['color']);
+		}
 		if(innerUL)
 		{
 			let $innerULObj = getDataHtml(innerUL);		
@@ -107,6 +112,10 @@ function getLiListData($liList)
 	$liList.each(function(e){
 		var liJson = {};
 		liJson['text'] = $(this).children('span.edit-list-span').html();
+		if($(this).children('span.edit-list-span').hasClass('hascolor'))
+		{
+			liJson['color'] = $(this).children('span.edit-list-span').css('background');
+		}
 		
 		if($(this).children('ul').length != 0)
 		{			
@@ -219,6 +228,11 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 	else if(keyCode == KEY_SPACE && isCmdOrCtrl(e))
 	{
 		markTaskDone($(this).parent('li'));
+	}
+	
+	else if(isCmdOrCtrl(e) && keyCode == KEY_L)
+	{
+		showBoardColorOptionSelect($(this));			
 	}
 });
 

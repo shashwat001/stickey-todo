@@ -154,6 +154,7 @@ li {
 {
 	font-size:x-large; 
 	min-width:100px;
+	min-height:30px;
 	margin: 2px 2px;
 	padding: 2px 30px;
 	background: #bdc3c7;
