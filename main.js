@@ -36,7 +36,7 @@ let mainWindow;
 function startUp()
 {
 	createWindow();
-//	setAppLevelShortcuts();
+//	setIntervalEvents();
 }
 
 function createWindow(){
@@ -60,11 +60,13 @@ function createWindow(){
 	reloadSettings();
 }
 
-function setAppLevelShortcuts()
+function setIntervalEvents()
 {
-	electronLocalshortcut.register('CmdOrCtrl+Alt+Super+Right', () => {
-		console.log('move captured')
-	})
+	setInterval(function()
+	{
+//		mainWindow.webContents.send('saveData');
+		console.log('print test');
+    }, 300000);
 }
 
 function reloadSettings(receiver)

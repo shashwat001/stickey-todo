@@ -139,7 +139,7 @@ li {
     /*color: #222;*/
 }
 
-.move-option-dropdown
+.option-dropdown
 {
 	z-index: 1000;
 	position:absolute !important;
@@ -150,7 +150,7 @@ li {
   	display: none;
 }
 
-.move-option-dropdown li
+.option-dropdown li
 {
 	font-size:x-large; 
 	min-width:100px;
@@ -159,7 +159,7 @@ li {
 	background: #bdc3c7;
 }
 
-.move-option-dropdown li:FOCUS
+.option-dropdown li:FOCUS
 {
 	background: #fff;
 }

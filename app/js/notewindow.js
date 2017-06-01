@@ -345,7 +345,6 @@ $(document).on('keydown', '.draggablenote', function(e) {
 		
 		else if(isCmdOrCtrl(e) && keyCode == KEY_H)
 		{
-			console.log(boards.length);
 			showBoardSelect($(this));			
 		}
 	}

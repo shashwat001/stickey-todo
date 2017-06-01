@@ -1,16 +1,19 @@
 'use strict';
 
+let crypto = require('crypto');
+
 var Board = require('./js/board');
 
 let boards = [];
 let currIndex = 0;
 
 var $currentBoard;
+let lastFileReadTime, lastFileSavedTime = 0;
+let lastFileReadChecksum;
 
 $('document').ready(function() 
 {
 	loadFile();
-//	createNewBoard();
 	$('#plus').click(function() 
 	{
 		$currentBoard.addNewNote();
@@ -94,17 +97,83 @@ $(document).on('keydown','.move-option-dropdown li', function(e)
 	
 	else if(keyCode == KEY_ESCAPE)
 	{
-		$(this).trigger('hover');
+		disableFocusoutMoveOption();
+		emptyMoveDropdown();
 		return false;
 	}
 });
 
-$(document).on('hover','.move-option-dropdown', function(e)
+$(document).on('keydown','.color-option-dropdown li', function(e)
 {
+	let keyCode = e.keyCode || e.which;
+	if(keyCode == KEY_TAB || keyCode == KEY_DOWN || keyCode == KEY_UP)
+	{
+		disableFocusoutMoveOption();
+		if(keyCode == KEY_TAB || keyCode == KEY_DOWN)
+		{
+			
+			if($(this).next().length != 0)
+			{
+				$(this).next().focusin();
+			}
+			else
+			{
+				$(this).parent().children().first().focus();
+			}
+			return false;
+		}
+		
+		else if((e.shiftKey && keyCode == KEY_TAB) || keyCode == KEY_UP)
+		{
+			if($(this).prev().length != 0)
+			{
+				$(this).prev().focus();
+			}
+			else
+			{
+				$(this).parent().children().last().focus();
+			}
+			return false;
+		}
+		enableFocusoutMoveOption();
+	}
+	
+	else if(keyCode == KEY_ENTER)
+	{
+		let $li = $(this).parent().data('li');
+		let newBoardIndex = $(this).data('boardIndex');
+		$li.appendTo(boards[newBoardIndex].$dom)
+		displayBoard(boards[newBoardIndex]);
+		$li.focus();
+		emptyMoveDropdown();
+		return false;
+	}
+	
+	/*else if(keyCode == KEY_ESCAPE)
+	{
+		emptyMoveDropdown();
+		return false;
+	}*/
+});
+
+function enableFocusoutMoveOption()
+{
+	console.log('enabled');
+	$(document).on('focusout','.move-option-dropdown', emptyMoveDropdown);
+}
+function disableFocusoutMoveOption()
+{
+	console.log('disabled');
+	$(document).off('focusout','.move-option-dropdown', emptyMoveDropdown);
+}
+
+function emptyMoveDropdown()
+{
+	console.log('emptying');
 	$('.move-option-dropdown').removeData();
 	$('.move-option-dropdown').empty();
 	$('.move-option-dropdown').hide();
-});
+}
 
 function deleteCurrentBoard()
 {
@@ -144,7 +213,7 @@ function showBoardSelect($li)
 	}
 	$('.move-option-dropdown').children().first().focus();
 	$('.move-option-dropdown').data('li', $li);
-	
+	enableFocusoutMoveOption();
 }
 
 function displayBoard(boardToShow)
@@ -226,26 +295,55 @@ function getSaveFilePath()
 	return path;
 }
 
+function saveFile(data)
+{
+	fs.writeFile(getSaveFilePath(), data, function(error) 
+	{
+	     if (error) 
+	     {
+	       console.error("write error:  " + error.message);
+	     } 
+	     else 
+	     {
+	    	 lastFileSavedTime = new Date();
+	    	 printMessage('Successfully Saved');;
+	     }
+	});
+}
+
 function saveData()
 {
-	
 	var boardsJsonData = [];
-// $('.draggablenote').each(function(e){
-// let jsonData = notewindow.getSerialized($(this));
-// boardsJsonData.push(jsonData);
-// });
 	for(let board of boards)
 	{		
 		boardsJsonData.push(board.getSerializedData())
 	}
 	
 	var data = JSON.stringify(boardsJsonData);
-	fs.writeFile(getSaveFilePath(), data, function(error) {
-	     if (error) {
-	       console.error("write error:  " + error.message);
-	     } else {
-	    	 printMessage('Successfully Saved');;
-	     }
+	let currentChecksum = checksum(data);
+	
+	saveFile(data);
+}
+
+function writeFileIfNotModified(data)
+{
+	fs.stat(getSaveFilePath(), function(error, stats) 
+	{
+		if (error) 
+		{
+			console.error("write error:  " + error.message);
+		} 
+		else 
+		{
+			if(stats.mtime <= Math.max(lastFileReadTime, lastFileSavedTime))
+			{
+				
+			}
+			else
+			{
+				loadFile();
+			}
+		}
 	});
 }
 
@@ -258,6 +356,8 @@ function loadFile()
 		    createNewBoard();
 		    return;
 		}
+		cleanUp();
+		lastFileReadChecksum = checksum(data);
 		var jsonObj = JSON.parse(data);
 
 		for(let boardData of jsonObj)
@@ -268,8 +368,19 @@ function loadFile()
 	});
 }
 
+function cleanUp()
+{
+	$('#boards').empty();
+	for(let board of boards)
+	{
+		board = undefined;
+	}
+	boards.length = 0;
+}
+
 function initParameters()
 {
+	lastFileReadTime = new Date();
 	for(let i = 0;i < boards.length;i++)
 	{
 		let board = boards[i];
@@ -288,4 +399,10 @@ function initParameters()
 
 }
 
-
+function checksum (str) 
+{
+    return crypto
+        .createHash('sha1')
+        .update(str, 'utf8')
+        .digest('hex');
+}
