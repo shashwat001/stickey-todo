@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 let crypto = require('crypto');
 
@@ -37,6 +37,7 @@ $(document).on('keydown','body', function(e)
 	
 	else if(e.altKey && keyCode ==  KEY_RIGHT)
 	{
+		$('.move-option-dropdown').blur();
 		showNextBoard();
 	}
 	
@@ -59,29 +60,34 @@ $(document).on('keydown','#board-name', function(e)
 $(document).on('keydown','.move-option-dropdown li', function(e)
 {
 	let keyCode = e.keyCode || e.which;
-	if(keyCode == KEY_TAB || keyCode == KEY_DOWN)
+	if(keyCode == KEY_TAB || keyCode == KEY_DOWN || keyCode == KEY_UP)
 	{
-		if($(this).next().length != 0)
+		disableFocusoutMoveOption();
+		if(keyCode == KEY_TAB || keyCode == KEY_DOWN)
 		{
-			$(this).next().focus();
+			
+			if($(this).next().length != 0)
+			{
+				$(this).next().focus();
+			}
+			else
+			{
+				$(this).parent().children().first().focus();
+			}
 		}
-		else
+		
+		else if((e.shiftKey && keyCode == KEY_TAB) || keyCode == KEY_UP)
 		{
-			$(this).parent().children().first().focus();
+			if($(this).prev().length != 0)
+			{
+				$(this).prev().focus();
+			}
+			else
+			{
+				$(this).parent().children().last().focus();
+			}
 		}
-		return false;
-	}
-	
-	else if((e.shiftKey && keyCode == KEY_TAB) || keyCode == KEY_UP)
-	{
-		if($(this).prev().length != 0)
-		{
-			$(this).prev().focus();
-		}
-		else
-		{
-			$(this).parent().children().last().focus();
-		}
+		enableFocusoutMoveOption();
 		return false;
 	}
 	
@@ -102,7 +108,7 @@ $(document).on('keydown','.move-option-dropdown li', function(e)
 		return false;
 	}
 });
-
+/*
 $(document).on('keydown','.color-option-dropdown li', function(e)
 {
 	let keyCode = e.keyCode || e.which;
@@ -149,27 +155,25 @@ $(document).on('keydown','.color-option-dropdown li', function(e)
 		return false;
 	}
 	
-	/*else if(keyCode == KEY_ESCAPE)
+	else if(keyCode == KEY_ESCAPE)
 	{
 		emptyMoveDropdown();
 		return false;
-	}*/
-});
+	}
+});*/
 
 function enableFocusoutMoveOption()
 {
-	console.log('enabled');
-	$(document).on('focusout','.move-option-dropdown', emptyMoveDropdown);
+	$(document).on('blur','.move-option-dropdown', emptyMoveDropdown);
 }
 function disableFocusoutMoveOption()
 {
-	console.log('disabled');
-	$(document).off('focusout','.move-option-dropdown', emptyMoveDropdown);
+	$(document).off('blur','.move-option-dropdown', emptyMoveDropdown);
 }
 
 function emptyMoveDropdown()
 {
-	console.log('emptying');
+	disableFocusoutMoveOption();
 	$('.move-option-dropdown').removeData();
 	$('.move-option-dropdown').empty();
 	$('.move-option-dropdown').hide();
@@ -236,15 +240,25 @@ function displayBoard(boardToShow)
 
 function showNextBoard()
 {
+	
 	$currentBoard.hide();
 	currIndex = (currIndex + 1)%boards.length;
 	$currentBoard = boards[currIndex];
 	$('#board-name').val($currentBoard.boardName);
 	$currentBoard.show();
+	
+/*	if($('.move-option-dropdown').is(":visible"))
+	{
+		emptyMoveDropdown();
+	}*/
 }
 
 function showPreviousBoard()
 {
+	/*if($('.move-option-dropdown').is(":visible"))
+	{
+		emptyMoveDropdown();
+	}*/
 	$currentBoard.hide();
 	currIndex = (currIndex - 1 + boards.length)%boards.length;
 	$currentBoard = boards[currIndex];
