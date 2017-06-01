@@ -149,9 +149,17 @@ $(document).on('keydown','.color-option-dropdown li', function(e)
 	else if(keyCode == KEY_ENTER)
 	{
 		let $li = $(this).parent().data('li');
-		let color = $(this).css('background');
-		$li.css('background', color);
-		$li.addClass('hascolor');
+		if($(this).hasClass('nocolor'))
+		{
+			$li.css('background','');
+			$li.removeClass('hascolor');
+		}
+		else
+		{
+			let color = $(this).css('background');
+			$li.css('background', color);
+			$li.addClass('hascolor');
+		}
 		$li.focus();
 		emptyColorDropdown();
 		return false;
@@ -242,9 +250,18 @@ function showBoardColorOptionSelect($li)
 {
 	let top = $li.position().top + $li.closest('.draggablenote').position().top;
 	let left = $li.position().left + $li.closest('.draggablenote').position().left;
+	
+	if($li.hasClass('hascolor'))
+	{
+		$('.nocolor').show();
+	}
+	else
+	{
+		$('.nocolor').hide();
+	}
 	$('.color-option-dropdown').show();
 	$('.color-option-dropdown').css({top:top, left:left})
-	$('.color-option-dropdown').children().first().focus();
+	$('.color-option-dropdown').children(':visible').first().focus();
 	$('.color-option-dropdown').data('li', $li);
 	enableFocusoutMoveOption();
 }
