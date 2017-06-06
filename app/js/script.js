@@ -8,8 +8,6 @@ let boards = [];
 let currIndex = 0;
 
 var $currentBoard;
-let lastFileReadTime, lastFileSavedTime = 0;
-let lastFileReadChecksum;
 
 $('document').ready(function() 
 {
@@ -365,7 +363,6 @@ function saveFile(data)
 	     } 
 	     else 
 	     {
-	    	 lastFileSavedTime = new Date();
 	    	 printMessage('Successfully Saved');;
 	     }
 	});
@@ -385,28 +382,6 @@ function saveData()
 	saveFile(data);
 }
 
-function writeFileIfNotModified(data)
-{
-	fs.stat(getSaveFilePath(), function(error, stats) 
-	{
-		if (error) 
-		{
-			console.error("write error:  " + error.message);
-		} 
-		else 
-		{
-			if(stats.mtime <= Math.max(lastFileReadTime, lastFileSavedTime))
-			{
-				
-			}
-			else
-			{
-				loadFile();
-			}
-		}
-	});
-}
-
 function loadFile()
 {
 	fs.readFile(getSaveFilePath(), 'utf8', function (err,data) 
@@ -417,7 +392,6 @@ function loadFile()
 		    return;
 		}
 		cleanUp();
-		lastFileReadChecksum = checksum(data);
 		var jsonObj = JSON.parse(data);
 
 		for(let boardData of jsonObj)
@@ -440,7 +414,6 @@ function cleanUp()
 
 function initParameters()
 {
-	lastFileReadTime = new Date();
 	for(let i = 0;i < boards.length;i++)
 	{
 		let board = boards[i];
@@ -466,3 +439,7 @@ function checksum (str)
         .update(str, 'utf8')
         .digest('hex');
 }
+
+fs.watchFile(getSaveFilePath(), function(curr, prev){
+	loadFile();
+});
