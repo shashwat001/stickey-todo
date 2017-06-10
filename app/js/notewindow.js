@@ -1,7 +1,8 @@
 'use strict';
 
-function notewindow(savedData)
+function notewindow(parentBoard, savedData)
 {
+	this.parent = parentBoard;
 	if(savedData)
 	{
 		this.node = createNote(true);
@@ -71,6 +72,11 @@ function getDataHtml(ulDataArray)
 		{
 			markTaskDone($li);
 		}
+		if(liData['color'])
+		{
+			$li.children('span.edit-list-span').addClass('hascolor');
+			$li.children('span.edit-list-span').css('background', liData['color']);
+		}
 		if(innerUL)
 		{
 			let $innerULObj = getDataHtml(innerUL);		
@@ -106,6 +112,10 @@ function getLiListData($liList)
 	$liList.each(function(e){
 		var liJson = {};
 		liJson['text'] = $(this).children('span.edit-list-span').html();
+		if($(this).children('span.edit-list-span').hasClass('hascolor'))
+		{
+			liJson['color'] = $(this).children('span.edit-list-span').css('background');
+		}
 		
 		if($(this).children('ul').length != 0)
 		{			
@@ -219,6 +229,11 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 	{
 		markTaskDone($(this).parent('li'));
 	}
+	
+	else if(isCmdOrCtrl(e) && keyCode == KEY_L)
+	{
+		showBoardColorOptionSelect($(this));			
+	}
 });
 
 function hideSubTasks($li)
@@ -276,7 +291,7 @@ $(document).on('keydown', '.draggablenote', function(e) {
 		
 		if(keyCode >= KEY_LEFT && keyCode <= KEY_DOWN)
 		{
-			if(isCmdOrCtrl(e))
+			if(isCmdOrCtrl(e) && !e.altKey)
 			{
 				let offset = 15;
 				if(keyCode == KEY_LEFT)
@@ -295,8 +310,8 @@ $(document).on('keydown', '.draggablenote', function(e) {
 				{
 					$(this).css('top', '+=' + offset)
 				}
+				return false;
 			}
-			return false;
 		}
 		else if (keyCode == KEY_TAB) //tab
 		{
@@ -340,6 +355,11 @@ $(document).on('keydown', '.draggablenote', function(e) {
 				$('.draggablenote').first().focus();
 				return false;
 			}
+		}
+		
+		else if(isCmdOrCtrl(e) && keyCode == KEY_H)
+		{
+			showBoardSelect($(this));			
 		}
 	}
 });

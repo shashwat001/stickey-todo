@@ -24,7 +24,7 @@ if (!fs.existsSync(settingspath)){
 }
 
 
-app.on('ready', createWindow);
+app.on('ready', startUp);
 app.on('will-quit', cleanUp);
 app.on('window-all-closed', function(){
 	app.quit();
@@ -33,9 +33,16 @@ app.on('window-all-closed', function(){
 
 let mainWindow;
 
+function startUp()
+{
+	createWindow();
+//	setIntervalEvents();
+}
+
 function createWindow(){
 	mainWindow = new BrowserWindow();
-	mainWindow.maximize();
+
+	 mainWindow.maximize();
 	
 	mainWindow.loadURL('file://' + __dirname + '/app/main.html');
 	
@@ -50,10 +57,19 @@ function createWindow(){
 	})
 //	mainWindow.webContents.openDevTools();
 
-loadSettings();
+	reloadSettings();
 }
 
-function loadSettings(receiver)
+function setIntervalEvents()
+{
+	setInterval(function()
+	{
+//		mainWindow.webContents.send('saveData');
+		console.log('print test');
+    }, 300000);
+}
+
+function reloadSettings(receiver)
 {
 	fs.readFile(settingsfilepath, 'utf8', function (err,data) {
 		if (err) {

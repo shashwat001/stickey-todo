@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>jQuery UI Draggable - Constrain movement</title>
+<title>My Todo</title>
 <link rel="stylesheet" href="css/style.css">
 
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
@@ -11,7 +11,7 @@
 <script src="js/jquery-ui.js"></script>
 <script>if (window.module) module = window.module;</script>
 
-<script src="js/constants.js"></script>
+<script src="js/definitions.js"></script>
 <script src="js/script.js"></script>
 
 </head>
@@ -20,10 +20,18 @@
 <div id="menu">
 	<span id="plus">+</span>
 	<span id="message-box"></span>
+	<input id="board-name" value=''></input>
+</div>
+<div id="boards">
+<!-- 	<div class="board"></div> -->
 </div>
 
-<div id="notes"></div>
-
-
+<ul class="move-option-dropdown option-dropdown" tabindex="-1"></ul>
+<ul class="color-option-dropdown option-dropdown" tabindex="-1">
+	<li tabindex="-1" class="nocolor"></li>
+	<li tabindex="-1" style="background: #b3e6b3"></li>
+	<li tabindex="-1" style="background: #ffb3b3"></li>
+	<li tabindex="-1" style="background: #ffd9b3"></li>
+</ul>
 </body>
 </html>
