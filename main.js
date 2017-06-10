@@ -97,8 +97,11 @@ function showShortcuts()
 	let settingsWindow = new BrowserWindow({frame:false, parent: mainWindow, modal: true, show: false});
 	settingsWindow.loadURL('file://' + __dirname + '/app/shortcuts.html');
 	settingsWindow.once('ready-to-show', () => {
-		settingsWindow.show()
+		settingsWindow.show();
 	})
+	electronLocalshortcut.register(settingsWindow,'CmdOrCtrl+W', () => {
+		settingsWindow.close();
+	});
 }
 
 
