@@ -569,13 +569,3 @@ function markTaskDone($parentLi)
 		$parentLi.removeData('done');
 	}
 }
-
-function isCmdOrCtrl(e)
-{
-	return e.ctrlKey || isCommandPressed(e);
-}
-
-function isCommandPressed(event) 
-{
-	return event.metaKey && ! event.ctrlKey;
-}
