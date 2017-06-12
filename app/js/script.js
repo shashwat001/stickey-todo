@@ -9,13 +9,9 @@ let currIndex = 0;
 
 var $currentBoard;
 
-$('document').ready(function() 
+$('document').ready(function()
 {
 	loadFile();
-	$('#plus').click(function() 
-	{
-		$currentBoard.addNewNote();
-	});
 });
 
 $(document).on('keydown','body', function(e)
@@ -28,18 +24,18 @@ $(document).on('keydown','body', function(e)
 			deleteCurrentBoard();
 		}
 		else
-		{	
+		{
 			createNewBoard();
 		}
 	}
-	
+
 	else if(e.altKey && keyCode ==  KEY_RIGHT)
 	{
 		emptyMoveDropdown();
 		emptyColorDropdown();
 		showNextBoard();
 	}
-	
+
 	else if(e.altKey && keyCode ==  KEY_LEFT)
 	{
 		emptyMoveDropdown();
@@ -66,7 +62,7 @@ $(document).on('keydown','.move-option-dropdown li', function(e)
 		disableFocusoutMoveOption();
 		if(keyCode == KEY_TAB || keyCode == KEY_DOWN)
 		{
-			
+
 			if($(this).next().length != 0)
 			{
 				$(this).next().focus();
@@ -76,7 +72,7 @@ $(document).on('keydown','.move-option-dropdown li', function(e)
 				$(this).parent().children().first().focus();
 			}
 		}
-		
+
 		else if((e.shiftKey && keyCode == KEY_TAB) || keyCode == KEY_UP)
 		{
 			if($(this).prev().length != 0)
@@ -91,7 +87,7 @@ $(document).on('keydown','.move-option-dropdown li', function(e)
 		enableFocusoutMoveOption();
 		return false;
 	}
-	
+
 	else if(keyCode == KEY_ENTER)
 	{
 		let $li = $(this).parent().data('li');
@@ -101,7 +97,7 @@ $(document).on('keydown','.move-option-dropdown li', function(e)
 		$li.focus();
 		return false;
 	}
-	
+
 	else if(keyCode == KEY_ESCAPE)
 	{
 		disableFocusoutMoveOption();
@@ -118,7 +114,7 @@ $(document).on('keydown','.color-option-dropdown li', function(e)
 		disableFocusoutColorOption();
 		if(keyCode == KEY_TAB || keyCode == KEY_DOWN)
 		{
-			
+
 			if($(this).next().length != 0)
 			{
 				$(this).next().focus();
@@ -128,7 +124,7 @@ $(document).on('keydown','.color-option-dropdown li', function(e)
 				$(this).parent().children().first().focus();
 			}
 		}
-		
+
 		else if((e.shiftKey && keyCode == KEY_TAB) || keyCode == KEY_UP)
 		{
 			if($(this).prev().length != 0)
@@ -143,7 +139,7 @@ $(document).on('keydown','.color-option-dropdown li', function(e)
 		enableFocusoutColorOption();
 		return false;
 	}
-	
+
 	else if(keyCode == KEY_ENTER)
 	{
 		let $li = $(this).parent().data('li');
@@ -162,7 +158,7 @@ $(document).on('keydown','.color-option-dropdown li', function(e)
 		emptyColorDropdown();
 		return false;
 	}
-	
+
 	else if(keyCode == KEY_ESCAPE)
 	{
 		emptyColorDropdown();
@@ -220,7 +216,7 @@ function deleteCurrentBoard()
 }
 
 function createNewBoard()
-{	
+{
 	let newBoard = createBoard();
 	displayBoard(newBoard);
 	$('#board-name').val('');
@@ -248,7 +244,7 @@ function showBoardColorOptionSelect($li)
 {
 	let top = $li.position().top + $li.closest('.draggablenote').position().top;
 	let left = $li.position().left + $li.closest('.draggablenote').position().left;
-	
+
 	if($li.hasClass('hascolor'))
 	{
 		$('.nocolor').show();
@@ -261,7 +257,7 @@ function showBoardColorOptionSelect($li)
 	$('.color-option-dropdown').css({top:top, left:left})
 	$('.color-option-dropdown').children(':visible').first().focus();
 	$('.color-option-dropdown').data('li', $li);
-	enableFocusoutMoveOption();
+	enableFocusoutColorOption();
 }
 
 function displayBoard(boardToShow)
@@ -284,13 +280,13 @@ function displayBoard(boardToShow)
 
 function showNextBoard()
 {
-	
+
 	$currentBoard.hide();
 	currIndex = (currIndex + 1)%boards.length;
 	$currentBoard = boards[currIndex];
 	$('#board-name').val($currentBoard.boardName);
 	$currentBoard.show();
-	
+
 /*	if($('.move-option-dropdown').is(":visible"))
 	{
 		emptyMoveDropdown();
@@ -328,7 +324,7 @@ ipcRenderer.on('saveData', function(arg) {
 });
 
 ipcRenderer.on('open-new-note', function(arg) {
-    $('#plus').trigger('click');
+    $currentBoard.addNewNote();
 });
 
 var fs = require("fs");
@@ -355,13 +351,13 @@ function getSaveFilePath()
 
 function saveFile(data)
 {
-	fs.writeFile(getSaveFilePath(), data, function(error) 
+	fs.writeFile(getSaveFilePath(), data, function(error)
 	{
-	     if (error) 
+	     if (error)
 	     {
 	       console.error("write error:  " + error.message);
-	     } 
-	     else 
+	     }
+	     else
 	     {
 	    	 printMessage('Successfully Saved');;
 	     }
@@ -372,21 +368,21 @@ function saveData()
 {
 	var boardsJsonData = [];
 	for(let board of boards)
-	{		
+	{
 		boardsJsonData.push(board.getSerializedData())
 	}
-	
+
 	var data = JSON.stringify(boardsJsonData);
 	let currentChecksum = checksum(data);
-	
+
 	saveFile(data);
 }
 
 function loadFile()
 {
-	fs.readFile(getSaveFilePath(), 'utf8', function (err,data) 
+	fs.readFile(getSaveFilePath(), 'utf8', function (err,data)
 	{
-		if (err) 
+		if (err)
 		{
 		    createNewBoard();
 		    return;
@@ -432,7 +428,7 @@ function initParameters()
 
 }
 
-function checksum (str) 
+function checksum (str)
 {
     return crypto
         .createHash('sha1')

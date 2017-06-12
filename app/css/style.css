@@ -28,7 +28,7 @@ html, body
 	margin: 0;
 	padding: 0;
 	/*overflow: auto;*/
-	background: #0079bf;
+	background: #724315;
 	font-family: sans-serif;
 }
 
@@ -36,11 +36,6 @@ html, body
 {
 	height:30px;
 	background: #fff;
-}
-
-#plus
-{
-	float:left;
 }
 
 #board-name
@@ -53,7 +48,7 @@ html, body
 	min-width:200px;
 	background-color: #e6e6e6;
 	text-align: center;
-	font-size: x-large;	
+	font-size: x-large;
 }
 
 #message-box
@@ -152,7 +147,7 @@ li {
 
 .option-dropdown li
 {
-	font-size:x-large; 
+	font-size:x-large;
 	min-width:100px;
 	min-height:30px;
 	margin: 2px 2px;
