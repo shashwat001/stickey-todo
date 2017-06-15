@@ -43,18 +43,19 @@ function createWindow(){
 	mainWindow = new BrowserWindow();
 
 	 mainWindow.maximize();
-	
+
 	mainWindow.loadURL('file://' + __dirname + '/app/main.html');
-	
+
 	electronLocalshortcut.register(mainWindow,'CmdOrCtrl+S', () => {
 		mainWindow.webContents.send('saveData');
-	}) 
+	})
 	electronLocalshortcut.register(mainWindow,'CmdOrCtrl+T', () => {
 		mainWindow.webContents.send('open-new-note');
-	}) 
+	})
 	electronLocalshortcut.register(mainWindow,'CmdOrCtrl+N', () => {
 		showShortcuts();
 	})
+	require('./menu/mainmenu')
 //	mainWindow.webContents.openDevTools();
 
 	reloadSettings();
