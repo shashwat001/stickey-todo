@@ -359,7 +359,7 @@ function saveFile(data)
 	     }
 	     else
 	     {
-	    	 printMessage('Successfully Saved');;
+	    	 printMessage('Saved');;
 	     }
 	});
 }

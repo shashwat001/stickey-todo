@@ -57,8 +57,13 @@ html, body
 	top: 50%;
 	left:50%;
 	padding:12px;
-	color: #fff;
+	color: #111;
 	font-size: xx-large;
+	z-index: 1000;
+	display: none;
+	border: 1px solid black;
+	background: #CDD7B6;
+	transform: translate(-50%, -50%);
 }
 
 #boards
@@ -110,7 +115,6 @@ li {
 	display: inline-block;
 	height: auto;
 	min-height: 1px;
-/* 	background-image: url("../images/down.png"); */
 }
 
 .expand-image
@@ -120,18 +124,16 @@ li {
 }
 
 .edit-list-span {
-	/*border: 1px solid #3465a4;*/
 	border-bottom: 1px solid #ccc;
 	padding: 4px 10px;
-    background: #fff;
-    font-size: 14px;
-    transition: 0.2s;
-    line-height: 1.5em;
-    display: block;
-    overflow:hidden;
-    letter-spacing: 0.02em;
-    border-radius: 4px;
-    /*color: #222;*/
+  background: #fff;
+  font-size: 14px;
+  transition: 0.2s;
+  line-height: 1.5em;
+  display: block;
+  overflow:hidden;
+  letter-spacing: 0.02em;
+  border-radius: 4px;
 }
 
 .option-dropdown
