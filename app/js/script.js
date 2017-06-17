@@ -121,13 +121,13 @@ $(document).on('keydown','.color-option-dropdown li', function(e)
 			}
 			else
 			{
-				$(this).parent().children().first().focus();
+				$(this).parent().children(':visible').first().focus();
 			}
 		}
 
 		else if((e.shiftKey && keyCode == KEY_TAB) || keyCode == KEY_UP)
 		{
-			if($(this).prev().length != 0)
+			if($(this).prev(':visible').length != 0)
 			{
 				$(this).prev().focus();
 			}
