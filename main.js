@@ -36,13 +36,10 @@ let mainWindow;
 function startUp()
 {
 	createWindow();
-//	setIntervalEvents();
 }
 
 function createWindow(){
-	mainWindow = new BrowserWindow();
-
-	 mainWindow.maximize();
+	mainWindow = new BrowserWindow({width: 1440, height: 900, resizable: false});
 
 	mainWindow.loadURL('file://' + __dirname + '/app/main.html');
 
