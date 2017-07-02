@@ -1,6 +1,7 @@
 //'use strict';
 
 let crypto = require('crypto');
+let spawn = require('child_process').spawn;
 
 var Board = require('./js/board');
 
@@ -51,6 +52,22 @@ $(document).on('keydown','#board-name', function(e)
 	{
 		$currentBoard.setBoardName($(this).val());
 		$currentBoard.newFocus();
+	}
+});
+
+$(document).on('keydown','#modal input', function(e)
+{
+	if(e.keyCode == KEY_ENTER)
+	{
+		let fileName = $(this).val();
+		let range = $('#modal').data('selectedObject');
+		$('#modal').removeData();
+		$(this).val('');
+		$.modal.close();
+		console.log(range.text);
+		range = getUpdatedRange(range, fileName);
+		restoreSelection(range);
+		return false;
 	}
 });
 
@@ -164,6 +181,12 @@ $(document).on('keydown','.color-option-dropdown li', function(e)
 		emptyColorDropdown();
 		return false;
 	}
+});
+
+$(document).on('click','a.fileLink', function(e)
+{
+	let fileName = $(this).attr('data-file');
+	spawn('atom', [fileName]);
 });
 
 function enableFocusoutMoveOption()
@@ -286,19 +309,10 @@ function showNextBoard()
 	$currentBoard = boards[currIndex];
 	$('#board-name').val($currentBoard.boardName);
 	$currentBoard.show();
-
-/*	if($('.move-option-dropdown').is(":visible"))
-	{
-		emptyMoveDropdown();
-	}*/
 }
 
 function showPreviousBoard()
 {
-	/*if($('.move-option-dropdown').is(":visible"))
-	{
-		emptyMoveDropdown();
-	}*/
 	$currentBoard.hide();
 	currIndex = (currIndex - 1 + boards.length)%boards.length;
 	$currentBoard = boards[currIndex];
@@ -439,3 +453,72 @@ function checksum (str)
 fs.watchFile(getSaveFilePath(), function(curr, prev){
 	loadFile();
 });
+
+function openFileNamePrompt()
+{
+  var selectionObject = saveSelectedElement();
+	console.log(selectionObject);
+  if (selectionObject)
+  {
+    $('#modal').modal();
+    $('#modal').data('selectedObject', selectionObject);
+		$('#modal input').focus();
+  }
+}
+
+function restoreSelection(range)
+{
+  if (range)
+  {
+    if (window.getSelection)
+    {
+      sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+			sel.empty();
+    }
+    else if (document.selection && range.select)
+    {
+      range.select();
+			document.selection.empty();
+    }
+  }
+}
+
+function saveSelectedElement()
+{
+	var sel, range;
+	if (window.getSelection)
+	{
+	  sel = window.getSelection();
+	  if (sel.toString() && sel.getRangeAt && sel.rangeCount)
+	  {
+	    return sel.getRangeAt(0);
+	  }
+	}
+	else if (document.selection && document.selection.createRange)
+	{
+	  return document.selection.createRange();
+	}
+	return null;
+}
+
+function getUpdatedRange(range, filename)
+{
+  if (window.getSelection)
+  {
+		let text = range.toString();
+    range.deleteContents();
+    range.insertNode(getUpdatedRangeText(text, filename));
+  }
+  else if (document.selection && document.selection.createRange)
+  {
+    range.text = replacementText;
+  }
+	return range;
+}
+
+function getUpdatedRangeText(selectedText)
+{
+	return $('<a>').addClass('fileLink').text(selectedText).attr("data-file", selectedText).get(0);
+}

@@ -8,8 +8,8 @@
   "keywords": ["todo","todoapp","todolist","notes","note-taking","trello","checkvist"],
   "homepage": "https://github.com/shashwat001/todo-app",
   "bugs": "https://github.com/shashwat001/todo-app/issues",
-  "repository": { 
-	  "type" : "git", 
+  "repository": {
+	  "type" : "git",
 	  "url" : "https://github.com/shashwat001/todo-app"
   },
   "license": "GPL-3.0",

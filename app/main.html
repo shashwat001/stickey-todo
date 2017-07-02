@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Todo</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/jquery.modal.min.css">
 
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 <script src="js/jquery-1.12.4.js"></script>
 <script src="js/jquery-ui.js"></script>
 <script>if (window.module) module = window.module;</script>
-
+<script src="js/jquery.modal.min.js"></script>
 <script src="js/definitions.js"></script>
 <script src="js/script.js"></script>
 
@@ -32,5 +33,10 @@
 	<li tabindex="-1" style="background: #ffb3b3"></li>
 	<li tabindex="-1" style="background: #ffd9b3"></li>
 </ul>
+
+<div id="modal">
+	<span>File Name</span>
+	<input type="text"/>
+</div>
 </body>
 </html>

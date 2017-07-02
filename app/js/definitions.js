@@ -15,6 +15,7 @@ let KEY_RIGHT = 39;
 let KEY_DOWN = 40;
 let KEY_B = 66;
 let KEY_D = 68;
+let KEY_F = 70;
 let KEY_H = 72;
 let KEY_L = 76;
 let KEY_M = 77;
@@ -24,7 +25,7 @@ function isCmdOrCtrl(e)
 	return e.ctrlKey || isCommandPressed(e);
 }
 
-function isCommandPressed(event) 
+function isCommandPressed(event)
 {
 	return event.metaKey && ! event.ctrlKey;
 }

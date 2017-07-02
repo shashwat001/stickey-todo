@@ -39,7 +39,7 @@ function getLi(text)
 	{
 		$span = $span.html(text);
 	}
-	
+
 	let $icon = $('<span>').addClass('subtask-icon');
 	$li.append($icon).append($span);
 	return $li;
@@ -79,9 +79,9 @@ function getDataHtml(ulDataArray)
 		}
 		if(innerUL)
 		{
-			let $innerULObj = getDataHtml(innerUL);		
+			let $innerULObj = getDataHtml(innerUL);
 			$li.append($innerULObj);
-			
+
 			if(liData['collapsed'])
 			{
 				hideSubTasks($li);
@@ -89,7 +89,7 @@ function getDataHtml(ulDataArray)
 			}
 			else
 			{
-				addSubTaskMarker($li);				
+				addSubTaskMarker($li);
 			}
 		}
 		$ul.append($li);
@@ -116,16 +116,16 @@ function getLiListData($liList)
 		{
 			liJson['color'] = $(this).children('span.edit-list-span').css('background');
 		}
-		
+
 		if($(this).children('ul').length != 0)
-		{			
+		{
 			liJson['data'] = getLiListData($(this).children('ul').children('li'));
 			if(isCollapsed($(this)))
 			{
 				liJson['collapsed'] = true;
 			}
 		}
-		
+
 		if($(this).data('done'))
 		{
 			liJson['isDone'] = true;
@@ -162,14 +162,14 @@ function taskHasSibling($task)
 
 $(document).on('keydown', '.edit-list-span', function(e) {
 
-	var keyCode = e.keyCode || e.which; 
-	
+	var keyCode = e.keyCode || e.which;
+
 	if(keyCode >= KEY_LEFT && keyCode <= KEY_DOWN) //arrows
 	{
 		e.stopPropagation();
 		handleKeyPress.call(this, e);
 	}
-	
+
 	else if (keyCode == KEY_ESCAPE) //escape
 	{
 		$(this).blur();
@@ -202,7 +202,7 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 			return false;
 		}
 		else
-		{	
+		{
 			moveInsidePrevSibling($(this));
 			$(this).focus();
 			return false;
@@ -229,10 +229,15 @@ $(document).on('keydown', '.edit-list-span', function(e) {
 	{
 		markTaskDone($(this).parent('li'));
 	}
-	
+
 	else if(isCmdOrCtrl(e) && keyCode == KEY_L)
 	{
-		showBoardColorOptionSelect($(this));			
+		showBoardColorOptionSelect($(this));
+	}
+
+	else if(isCmdOrCtrl(e) && e.shiftKey && keyCode == KEY_F)
+	{
+		openFileNamePrompt($(this));
 	}
 });
 
@@ -287,8 +292,8 @@ $(document).on('keydown', '.draggablenote', function(e) {
 
 	if(this == e.target)
 	{
-		var keyCode = e.keyCode || e.which; 
-		
+		var keyCode = e.keyCode || e.which;
+
 		if(keyCode >= KEY_LEFT && keyCode <= KEY_DOWN)
 		{
 			if(isCmdOrCtrl(e) && !e.altKey)
@@ -328,7 +333,7 @@ $(document).on('keydown', '.draggablenote', function(e) {
 				return false;
 			}
 			else
-			{	
+			{
 				if($(this).next('.draggablenote').length != 0)
 				{
 					$(this).next('.draggablenote').focus();
@@ -340,13 +345,13 @@ $(document).on('keydown', '.draggablenote', function(e) {
 				return false;
 			}
 		}
-		
+
 		else if(keyCode == KEY_ENTER)
-		{		
+		{
 			$(this).children('.title').focus();
 			return false;
 		}
-		
+
 		else if(keyCode == KEY_D) //d
 		{
 			if(isCmdOrCtrl(e))
@@ -356,10 +361,10 @@ $(document).on('keydown', '.draggablenote', function(e) {
 				return false;
 			}
 		}
-		
+
 		else if(isCmdOrCtrl(e) && keyCode == KEY_H)
 		{
-			showBoardSelect($(this));			
+			showBoardSelect($(this));
 		}
 	}
 });
@@ -371,7 +376,7 @@ function moveInsidePrevSibling($obj)
 		return;
 	var $ul;
 	if($prev.children('ul').length == 0)
-	{		
+	{
 		$ul = $('<ul>').addClass('myUL');
 		$prev.append($ul);
 		addSubTaskMarker($prev);
@@ -380,19 +385,19 @@ function moveInsidePrevSibling($obj)
 	{
 		$ul = $prev.children('ul')[0];
 	}
-	
+
 	 $obj.parent('li').appendTo($ul);
-	
+
 }
 
 function moveAfterParent($obj)
 {
 	var $parUL = $obj.parent('li').parent('ul');
 	var $parLI = $parUL.parent('li');
-	
+
 	if($parLI.length == 0)
 		return;
-	
+
 	$obj.parent('li').insertAfter($parLI);
 	if($parUL.children('li').length == 0)
 	{
@@ -434,7 +439,7 @@ function getImg(direction)
 function handleKeyPress(e)
 {
 	var keyCode = e.keyCode || e.which;
-	
+
 	if(isCmdOrCtrl(e) && e.shiftKey)
 	{
 		if(keyCode == KEY_DOWN)
@@ -500,9 +505,9 @@ function hasPreviousTask($li)
 
 function getNextList($li, moveUp)
 {
-	if(!moveUp && hasSubTasks($li) && !isCollapsed($li))	
+	if(!moveUp && hasSubTasks($li) && !isCollapsed($li))
 	{
-		return $li.children('ul').children('li').first();	
+		return $li.children('ul').children('li').first();
 	}
 
 	else if(hasNextTask($li))

@@ -161,3 +161,35 @@ li {
 {
 	background: #fff;
 }
+
+#modal input
+{
+	display: block;
+	margin: auto;
+	width: 100%;
+	line-height: 20px;
+	padding: 5px 10px;
+	word-wrap:break-word;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#modal span
+{
+	display: block;
+	margin: 5px;
+}
+
+a.fileLink
+{
+	text-decoration: underline;
+}
+
+a.fileLink:hover
+{
+	color: blue;
+	cursor: context-menu;
+}
