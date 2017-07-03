@@ -60,13 +60,23 @@ $(document).on('keydown','#modal input', function(e)
 	if(e.keyCode == KEY_ENTER)
 	{
 		let fileName = $(this).val();
-		let range = $('#modal').data('selectedObject');
+		if(fileName)
+		{
+			if($('#modal').data('isUpdate'))
+			{
+				let $anchor = $('#modal').data('selectedLink');
+				$anchor.attr('data-file', fileName);
+			}
+			else
+			{
+				let range = $('#modal').data('selectedObject');
+				$(this).val('');
+				range = getUpdatedRange(range, fileName);
+				restoreSelection(range);
+			}
+		}
 		$('#modal').removeData();
-		$(this).val('');
 		$.modal.close();
-		console.log(range.text);
-		range = getUpdatedRange(range, fileName);
-		restoreSelection(range);
 		return false;
 	}
 });
@@ -185,8 +195,18 @@ $(document).on('keydown','.color-option-dropdown li', function(e)
 
 $(document).on('click','a.fileLink', function(e)
 {
-	let fileName = $(this).attr('data-file');
-	spawn('atom', [fileName]);
+	if(isCmdOrCtrl(e))
+	{
+		let fileName = $(this).attr('data-file');
+		$('#modal').data('selectedLink', $(this));
+		updateFileNamePrompt(fileName);
+	}
+	else
+	{
+		let fileName = $(this).attr('data-file');
+		spawn('atom', [fileName]);
+		return false;
+	}
 });
 
 function enableFocusoutMoveOption()
@@ -457,13 +477,20 @@ fs.watchFile(getSaveFilePath(), function(curr, prev){
 function openFileNamePrompt()
 {
   var selectionObject = saveSelectedElement();
-	console.log(selectionObject);
   if (selectionObject)
   {
     $('#modal').modal();
     $('#modal').data('selectedObject', selectionObject);
 		$('#modal input').focus();
   }
+}
+
+function updateFileNamePrompt(currentFileName)
+{
+    $('#modal').modal();
+		$('#modal input').val(currentFileName);
+		$('#modal').data('isUpdate', true);
+		$('#modal input').focus();
 }
 
 function restoreSelection(range)
@@ -518,7 +545,7 @@ function getUpdatedRange(range, filename)
 	return range;
 }
 
-function getUpdatedRangeText(selectedText)
+function getUpdatedRangeText(selectedText, filename)
 {
-	return $('<a>').addClass('fileLink').text(selectedText).attr("data-file", selectedText).get(0);
+	return $('<a>').addClass('fileLink').text(selectedText).attr("data-file", filename).get(0);
 }
