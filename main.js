@@ -55,7 +55,7 @@ function createWindow(){
 	require('./menu/mainmenu')
 //	mainWindow.webContents.openDevTools();
 
-	reloadSettings();
+	loadSettings();
 }
 
 function setIntervalEvents()
@@ -67,7 +67,7 @@ function setIntervalEvents()
     }, 300000);
 }
 
-function reloadSettings(receiver)
+function loadSettings(receiver)
 {
 	fs.readFile(settingsfilepath, 'utf8', function (err,data) {
 		if (err) {

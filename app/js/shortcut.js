@@ -10,11 +10,11 @@ const {
 
 const fs = require('fs');
 
-$(document).ready(function(){	
+$(document).ready(function(){
 	$( "#tabs" ).tabs();
-	
+
 	loadSettings();
-	
+
 	$('form').submit(function(){
 		let settings = $(this).serializeArray();
 		let jsonData = {}
@@ -22,10 +22,10 @@ $(document).ready(function(){
 		{
 			jsonData[pair['name']] = pair['value'];
 		}
-		
-		
+
+
 		let saveSettingsFilePath = remote.getGlobal('settingsfilepath');
-		
+
 		fs.writeFile(saveSettingsFilePath, JSON.stringify(jsonData), function(error) {
 		     if (error) {
 		       console.error("write error:  " + error.message);
@@ -33,10 +33,10 @@ $(document).ready(function(){
 		    	 ipcRenderer.send('load-settings');
 		     }
 		});
-		
-		
+
+
 	});
-	
+
 	$('form input[name=path]').dblclick(function(){
 		let dir = remote.dialog.showOpenDialog({properties: ['openDirectory']});
 		$(this).val(dir);

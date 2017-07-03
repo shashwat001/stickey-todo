@@ -66,6 +66,7 @@ $(document).on('keydown','#modal input', function(e)
 			{
 				let $anchor = $('#modal').data('selectedLink');
 				$anchor.attr('data-file', fileName);
+				$anchor.attr('title', fileName);
 			}
 			else
 			{
@@ -204,7 +205,15 @@ $(document).on('click','a.fileLink', function(e)
 	else
 	{
 		let fileName = $(this).attr('data-file');
-		spawn('atom', [fileName]);
+		let status = spawn(remote.getGlobal('settings').open_file_command, [fileName]);
+		status.stderr.on('data', function (data)
+		{
+		  console.error(data);
+		})
+		status.stdout.on('data', function (data)
+		{
+		  console.log(data.toString())
+		})
 		return false;
 	}
 });
@@ -547,5 +556,10 @@ function getUpdatedRange(range, filename)
 
 function getUpdatedRangeText(selectedText, filename)
 {
-	return $('<a>').addClass('fileLink').text(selectedText).attr("data-file", filename).get(0);
+	return $('<a>')
+	.addClass('fileLink')
+	.text(selectedText)
+	.attr("data-file", filename)
+	.attr("title", filename)
+	.get(0);
 }
