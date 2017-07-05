@@ -76,6 +76,14 @@ $(document).on('keydown','#modal input', function(e)
 				restoreSelection(range);
 			}
 		}
+		else
+		{
+			if($('#modal').data('isUpdate'))
+			{
+				let $anchor = $('#modal').data('selectedLink');
+				$anchor.replaceWith($anchor.html());
+			}
+		}
 		$('#modal').removeData();
 		$.modal.close();
 		return false;
