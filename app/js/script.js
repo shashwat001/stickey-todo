@@ -456,10 +456,8 @@ function loadQuotes()
 	{
 		if (err)
 		{
-		    createNewBoard();
 		    return;
 		}
-		cleanUp();
 		var jsonObj = JSON.parse(data);
 
 		for(let boardData of jsonObj)
