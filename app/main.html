@@ -7,10 +7,18 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/jquery.modal.min.css">
 
-<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<script>
+	if (typeof module === 'object') {
+		window.module = module;
+		module = undefined;
+	}
+</script>
 <script src="js/jquery-1.12.4.js"></script>
 <script src="js/jquery-ui.js"></script>
-<script>if (window.module) module = window.module;</script>
+<script>
+	if (window.module)
+		module = window.module;
+</script>
 <script src="js/jquery.modal.min.js"></script>
 <script src="js/definitions.js"></script>
 <script src="js/script.js"></script>
@@ -18,25 +26,28 @@
 </head>
 <body>
 
-<div id="menu">
-	<span id="message-box"></span>
-	<input id="board-name" value=''></input>
-</div>
-<div id="boards">
-<!-- 	<div class="board"></div> -->
-</div>
+	<div id="menu">
+		<span id="message-box"></span> <input id="board-name" value=''></input>
+	</div>
+	<div id="boards">
+		<!-- 	<div class="board"></div> -->
+	</div>
 
-<ul class="move-option-dropdown option-dropdown" tabindex="-1"></ul>
-<ul class="color-option-dropdown option-dropdown" tabindex="-1">
-	<li tabindex="-1" class="nocolor"></li>
-	<li tabindex="-1" style="background: #b3e6b3"></li>
-	<li tabindex="-1" style="background: #ffb3b3"></li>
-	<li tabindex="-1" style="background: #ffd9b3"></li>
-</ul>
+	<ul class="move-option-dropdown option-dropdown" tabindex="-1"></ul>
+	<ul class="color-option-dropdown option-dropdown" tabindex="-1">
+		<li tabindex="-1" class="nocolor"></li>
+		<li tabindex="-1" style="background: #b3e6b3"></li>
+		<li tabindex="-1" style="background: #ffb3b3"></li>
+		<li tabindex="-1" style="background: #ffd9b3"></li>
+	</ul>
 
-<div id="modal" style="display:none;">
-	<span>File Name</span>
-	<input type="text"/>
-</div>
+	<div id="modal" style="display: none;">
+		<span>File Name</span> <input type="text" />
+	</div>
+
+	<div id="quotes">
+		<span>In the end, only regrets you will have are the chances
+			you didn't take.</span>
+	</div>
 </body>
 </html>

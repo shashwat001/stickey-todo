@@ -15,6 +15,7 @@
 	 box-shadow: 5px 5px 7px rgba(33,33,33,.7);
 	 position: absolute !important;
 	 border-radius: 2px;
+	 z-index: 10;
 }
 
 .draggablenote:focus {
@@ -192,4 +193,30 @@ a.fileLink:hover
 {
 	color: blue;
 	cursor: context-menu;
+}
+
+#quotes
+{
+	position: fixed;
+	background-color: #c1e3ec;
+	top: 50%;
+	left: 50%;
+	z-index: 5;
+	min-height: 300px;
+	width:300px;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	vertical-align: middle;
+	display: table;
+	padding: 20px;
+	font-size: 25px;
+	opacity:0.3;
+	color: black;
+	overflow: hidden;
+}
+
+#quotes span
+{
+	display: table-cell;
+	vertical-align: middle;
 }

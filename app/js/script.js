@@ -13,6 +13,7 @@ var $currentBoard;
 $('document').ready(function()
 {
 	loadFile();
+	loadQuotes();
 });
 
 $(document).on('keydown','body', function(e)
@@ -386,18 +387,18 @@ function printMessage(message)
 	$('#message-box').delay(2000).fadeOut('slow');
 }
 
-function getSaveFilePath()
+function getGlobalSettingsDir()
 {
-	let path;
 	if(remote.getGlobal('settings') && remote.getGlobal('settings').path)
 	{
-		path = remote.getGlobal('settings').path + '/todo-app.json';
+		return remote.getGlobal('settings').path;
 	}
-	else
-	{
-		path = remote.getGlobal('settingspath') + '/todo-app.json';
-	}
-	return path;
+	remote.getGlobal('settingspath');
+}
+
+function getSaveFilePath()
+{
+	return getGlobalSettingsDir() + '/todo-app.json';
 }
 
 function saveFile(data)
@@ -432,6 +433,26 @@ function saveData()
 function loadFile()
 {
 	fs.readFile(getSaveFilePath(), 'utf8', function (err,data)
+	{
+		if (err)
+		{
+		    createNewBoard();
+		    return;
+		}
+		cleanUp();
+		var jsonObj = JSON.parse(data);
+
+		for(let boardData of jsonObj)
+  		{
+  			createBoard(boardData);
+  		}
+		initParameters();
+	});
+}
+
+function loadQuotes()
+{
+	fs.readFile(getGlobalSettingsDir() + '/quotes.json', 'utf8', function (err,data)
 	{
 		if (err)
 		{
