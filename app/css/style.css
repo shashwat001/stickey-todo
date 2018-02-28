@@ -207,7 +207,7 @@ a.fileLink:hover
 	transform: translate(-50%, -50%);
 	text-align: center;
 	vertical-align: middle;
-	display: table;
+	display: none;
 	padding: 20px;
 	font-size: 25px;
 	opacity:0.3;

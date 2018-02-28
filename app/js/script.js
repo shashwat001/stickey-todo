@@ -6,6 +6,8 @@ let spawn = require('child_process').spawn;
 var Board = require('./js/board');
 
 let boards = [];
+let quotes = [];
+let currentQuote = 0;
 let currIndex = 0;
 
 var $currentBoard;
@@ -458,14 +460,23 @@ function loadQuotes()
 		{
 		    return;
 		}
-		var jsonObj = JSON.parse(data);
-
-		for(let boardData of jsonObj)
-  		{
-  			createBoard(boardData);
-  		}
-		initParameters();
+		
+		quotes = JSON.parse(data);
+		
+		$('#quotes').css('display', 'table');
+		$('#quotes span').html(quotes[0]);
+		currentQuote = 0;
+		if(quotes.length > 1)
+		{
+			 setInterval(rotateQuotes,30000);
+		}
 	});
+}
+
+function rotateQuotes()
+{
+	currentQuote = (currentQuote + 1)%quotes.length;
+	$('#quotes span').html(quotes[currentQuote]);
 }
 
 function cleanUp()
