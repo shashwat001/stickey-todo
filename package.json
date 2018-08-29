@@ -5,12 +5,20 @@
   "main": "main.js",
   "author": "Shashwat Kumar",
   "description": "Todo app for keyboard junkies",
-  "keywords": ["todo","todoapp","todolist","notes","note-taking","trello","checkvist"],
+  "keywords": [
+    "todo",
+    "todoapp",
+    "todolist",
+    "notes",
+    "note-taking",
+    "trello",
+    "checkvist"
+  ],
   "homepage": "https://github.com/shashwat001/todo-app",
   "bugs": "https://github.com/shashwat001/todo-app/issues",
   "repository": {
-	  "type" : "git",
-	  "url" : "https://github.com/shashwat001/todo-app"
+    "type": "git",
+    "url": "https://github.com/shashwat001/todo-app"
   },
   "license": "GPL-3.0",
   "scripts": {
@@ -18,7 +26,7 @@
     "package": "electron-packager . --overwrite --icon=icons/todo-add.ico --prune=true --out=release-builds"
   },
   "dependencies": {
-    "electron": "1.6.6",
+    "electron": "2.0.8",
     "electron-localshortcut": "1.1.1"
   }
 }
