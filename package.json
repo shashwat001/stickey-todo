@@ -23,7 +23,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "start": "electron .",
-    "package": "electron-packager . --overwrite --icon=icons/todo-add.ico --prune=true --out=release-builds"
+    "package": "electron-packager . --overwrite --icon=icons/todo-app.ico --prune=true --out=release-builds"
   },
   "dependencies": {
     "electron": "2.0.8",
